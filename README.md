@@ -6,8 +6,14 @@
 + Repositary Master : Nickole Tan 
 + New Modified Date : 10 November 2020
 ! Describes : To implement the food delivery transactions website called PIZZAGANG. 
-[]here
+
 ```
+# Credentials Type : Visitor , Member , Administrator 
+# Functionalities Provided as Below
+- User Permissions Login/Logout
+- User Roles Tracks
+
+
 
 
 

@@ -8,7 +8,11 @@
 ! Describes : To implement the food delivery transactions website called PIZZAGANG. 
 
 ```
-# Credentials Type : Visitor , Member , Administrator 
+# Credentials Types
+- Visitor 
+- Member 
+- Administrator 
+
 # Functionalities Provided as Below
 - User Permissions Login/Logout
 - User Roles Tracks

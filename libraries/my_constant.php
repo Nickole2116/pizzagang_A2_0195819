@@ -1,0 +1,9 @@
+<?php
+
+define("TEST","WOW");
+define("ERROR_FUNCTION_INVALID","INVALID FUNCTION DETECTIONS FROM %s ()");
+
+
+
+
+?>

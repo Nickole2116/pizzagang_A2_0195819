@@ -8,7 +8,7 @@
 
     </head>
     <body>
-        this is order confirmation  page
+        this is order  page
 
         <div id="test"></div>
 
@@ -19,15 +19,12 @@
             var origin_path = window.location.origin + "/" + slice_projname[1];
 
 
-            var base_url = origin_path + '/Controllers/index.php?action=order_confirmation_member';
+            var base_url = origin_path + '/Controllers/index.php?action=delete_cart_item';
             
             $.ajax({
                 type: "POST",
                 url: base_url,
-                data: { promocode : "XXT-223",
-                        deliveryname : "Nickole Tan",
-                        phone : "0143387799",
-                        desc : "-" },
+                data: { pid_delete : "2" },
                 success: function(datas) {
                     // Run the code here that needs
                     //    to access the data returned

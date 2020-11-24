@@ -581,24 +581,126 @@
 
         }
 
-
-
-
-        public function make_order()
+        public function fetch_promo_code($promocode)
         {
-            //address, phone, promocode (optional) , name
-            //lists
+            $data = $this->conn->prepare("SELECT * FROM `promotion` JOIN `promotion_rate` ON promotion.promotion_rate_id = promotion_rate.promo_rate_id WHERE promo_code = :cod");
+            $data->bindParam(':cod', $promocode);
+            $data->execute();
+
+            $res = $data->fetch();
+            return $res;
+
+        }
+
+        public function check_log_promotion($token_acc,$promocode)
+        {
+            //where acc_no
+            $data = $this->conn->prepare("SELECT * FROM promotion_log WHERE promotion_code = :code AND token = :tkn ;");
+            $data->bindParam(':code', $promocode);
+            $data->bindParam(':tkn', $token_acc);
+            $data->execute();
+
+            $count = $data->rowCount();
+            
+            return $count;
+        }
+
+        public function view_order($token_acc)
+        {
+            //SELECT * FROM `product_category` JOIN product ON product_category.category_id = product.category_id
+            $data = $this->conn->prepare("SELECT * FROM orders JOIN orders_trx ON orders.order_id = orders_trx.order_id WHERE orders.token = :tkn ");
+            $data->bindParam(':tkn', $token_acc);
+
+            $data->execute();
+            $res = $data->fetchAll();
+            $ress = array("Order"=> $token_acc,"Responses"=>$res);
+
+            $pretty = json_encode($ress , JSON_PRETTY_PRINT);
+
+            return $pretty;
+
+        }
+
+        public function view_my_cart($acc_no_encry)
+        {
+            //get package lists
+            //show package details
+            $lists = self::get_cart_by_accno($acc_no_encry);
+            $conv_array = explode(",",$lists);
+            $count_each = array_count_values($conv_array);
+            $product_ids_each = array();
+
+            foreach($count_each as $product => $count)
+            {
+                //get each product id only (excluded counts)
+                array_push($product_ids_each,$product);
+            }
+
+            $exploded_productid = implode(",",$product_ids_each);
+            $url = urlencode($exploded_productid);
+            $chg = str_replace('%2C','%27%2C%27',$url); //change , symbol to ','
+            $re_url =  urldecode($chg);
+
+            $data = $this->conn->prepare("SELECT product.product_id , product.product_attachs, product.product_name , product.product_description , product.product_price , product_category.category_name FROM `product_category` JOIN product ON product_category.category_id = product.category_id WHERE product.product_id IN ( '$re_url' ) ");
+            //$data->bindParam(":types",$re_wish);
+            
+            $data->execute();
+            $res = $data->fetchAll();
+            if(empty($res))
+            {
+                return null;
+            }else{
+
+                //add new column inside (quanlity of product)
+                $ress = array("Products"=>$res, "Count"=>$count_each);
+                $pretty = json_encode($ress , JSON_PRETTY_PRINT);
+
+                return $pretty;
+
+            }
 
 
         }
 
-        public function view_order()
+        public function view_my_cart_visitor($session)
         {
+            //get package lists
+            //show package details
+            $lists = self::get_cart_by_session($session);
+            $conv_array = explode(",",$lists);
+            $count_each = array_count_values($conv_array);
+            $product_ids_each = array();
 
-        }
+            foreach($count_each as $product => $count)
+            {
+                //get each product id only (excluded counts)
+                array_push($product_ids_each,$product);
+            }
 
-        public function view_my_cart()
-        {
+            $exploded_productid = implode(",",$product_ids_each);
+            $url = urlencode($exploded_productid);
+            $chg = str_replace('%2C','%27%2C%27',$url); //change , symbol to ','
+            $re_url =  urldecode($chg);
+
+            $data = $this->conn->prepare("SELECT product.product_id , product.product_attachs, product.product_name , product.product_description , product.product_price , product_category.category_name FROM `product_category` JOIN product ON product_category.category_id = product.category_id WHERE product.product_id IN ( '$re_url' ) ");
+            //$data->bindParam(":types",$re_wish);
+            
+            $data->execute();
+            $res = $data->fetchAll();
+            if(empty($res))
+            {
+                return null;
+            }else{
+
+                //add new column inside (quanlity of product)
+                $ress = array("Products"=>$res, "Count"=>$count_each);
+                $pretty = json_encode($ress , JSON_PRETTY_PRINT);
+
+                return $pretty;
+
+            }
+
+            
 
         }
 
@@ -606,7 +708,334 @@
         {
 
         }
+
+        public function delete_one_cart_items($pids_del,$role,$acc_session_val,$nows)
+        {
+            if($role == "member")
+            {
+                //if member 
+                $lists = self::get_cart_by_accno($acc_session_val);
+                $conv_array = explode(",",$lists);
+                $count_each = array_count_values($conv_array);
+                if(array_key_exists($pids_del,$count_each))
+                {
+                    //check value isnt more than one?
+                    $count_del_item = $count_each[$pids_del];
+                    if($count_del_item > 1)
+                    {
+                        $latest_value = $count_del_item -1;
+                        $count_each[$pids_del] = $latest_value;
+                       
+                    }else
+                    {
+                        //only one
+                        //direct unset the del_item
+                        unset($count_each[$pids_del]);
+                    }
+
+                    $new_list = array();
+                    foreach($count_each as $val => $count)
+                    {
+                        for($i = 1; $i <= $count ; $i++)
+                        {
+                            array_push($new_list,$val);
+                        }
+                    }
+                    $new_list_conv = implode(",",$new_list);
+                    $res = self::update_cart($new_list_conv,$acc_session_val,$nows);
+                    return $res;
+
+                }else
+                {
+                    return "no match";
+                }
+
+
+
+            }else if($role == "visitor")
+            {
+                //if visitor
+                $lists = self::get_cart_by_session($acc_session_val);
+                $conv_array = explode(",",$lists);
+                $count_each = array_count_values($conv_array);
+
+                if(array_key_exists($pids_del,$count_each))
+                {
+                    //check value isnt more than one?
+                    $count_del_item = $count_each[$pids_del];
+                    if($count_del_item > 1)
+                    {
+                        $latest_value = $count_del_item -1;
+                        $count_each[$pids_del] = $latest_value;
+                       
+                    }else
+                    {
+                        //only one
+                        //direct unset the del_item
+                        unset($count_each[$pids_del]);
+                    }
+                    $new_list = array();
+                    foreach($count_each as $val => $count)
+                    {
+                        for($i = 1; $i <= $count ; $i++)
+                        {
+                            array_push($new_list,$val);
+                        }
+                    }
+                    $new_list_conv = implode(",",$new_list);
+                    $res = self::update_cart_visitor($new_list_conv,$acc_session_val,$nows);
+                    return $res;
+
+                }else
+                {
+                    echo "no match";
+                }
+
+
+            }else
+            {
+                return "Error Invalid Credential on its Action";
+            }
+
+            //return $pids_del;
+
+
+        }
+
+        public function order_submit_visitor()
+        {
+
+        }
+
+        private function create_order_trx_visitor()
+        {
+
+        }
+
+        public function order_submit_member($name, $email, $phone, $address, $total, $taxs, $desc,$en_acc_no)
+        {
+            require_once("../libraries/my_functions.php");
+            $my_functions = new My_functions();
+            $lists = self::get_cart_by_accno($en_acc_no);
+            if(!empty($lists))
+            {
+                try{
+                    $ref_id_gen = uniqid();
+                    $now_time = $my_functions->now(); 
+                    $com = $this->conn->prepare('INSERT INTO orders VALUES(NULL, :ref, :na, :list, :email , :phone , :addresses , :noww , :total , :tax , :descri , :tokens );');
+                    $com->bindParam(':ref',$ref_id_gen);
+                    $com->bindParam(':na',$name);
+                    $com->bindParam(':list',$lists);
+                    $com->bindParam(':email',$email);
+                    $com->bindParam(':phone',$phone);
+                    $com->bindParam(':addresses',$address);
+                    $com->bindParam(':noww',$now_time);
+                    $com->bindParam(':total',$total);
+                    $com->bindParam(':tax',$taxs);
+                    $com->bindParam(':descri',$desc);
+                    $com->bindParam(':tokens',$en_acc_no);
+        
+        
+                    $com->execute();
+                    
+                    return "insert";
+        
+                }catch(Exception $e)
+                {
+                    return $e->getMessage();
+        
+                }
+        
+
+
+            }else 
+            {
+                echo "Error Occured : Empty" ;
+            }
+            return $lists;
+
+
+        }
+        public function create_order_trx_member($memberid, $sessionid, $order_id)
+        {
+            require_once("../libraries/my_functions.php");
+            $my_functions = new My_functions();
+
+            try{
+                $tracking_number = 'DOT-'.rand();
+                $now_time = $my_functions->now(); 
+                $status = 1;
+                $com = $this->conn->prepare('INSERT INTO orders_trx VALUES(NULL, :track_no , :memberid, :session_ids , :orderid , :statusess );');
+                $com->bindParam(':track_no',$tracking_number);
+                $com->bindParam(':memberid',$memberid);
+                $com->bindParam(':session_ids',$sessionid);
+                $com->bindParam(':orderid',$order_id);
+                $com->bindParam(':statusess',$status);
+                
+    
+                $com->execute();
+    
+                return 1;
+    
+            }catch(Exception $e)
+            {
+                return $e->getMessage();
+    
+            }
+    
+
+        }
+
+        public function get_detail_by_token($token_acc)
+        {
+            $data = $this->conn->prepare("SELECT * FROM member WHERE token = :tkn");
+            $data->bindParam(':tkn', $token_acc);
+            $data->execute();
+
+            $res = $data->fetch();
+            
+            return $res;
+
+        }
+
+    public function get_latest_inserted_row_order($tbname,$tkn=1)
+    {
+        if($tbname == "member")
+        {
+            $data = $this->conn->prepare("SELECT * FROM member WHERE email_address = :email ORDER BY memberid DESC LIMIT 1");
+            $data->bindParam(':email',$tkn);
+            $data->execute();
+            $res = $data->fetch();
+            return $res;
+
+        }elseif($tbname == "orders")
+        {
+            $data = $this->conn->prepare("SELECT * FROM `orders` WHERE token = :tkn ORDER BY order_created_date DESC LIMIT 1");
+            $data->bindParam(':tkn',$tkn);
+            $data->execute();
+            $res = $data->fetch();
+            return $res;
+
+        }elseif($tbname == "orders_trx")
+        {
+            $data = $this->conn->prepare("SELECT * FROM `orders_trx` ORDER BY orders_trx_id DESC LIMIT 1");
+            $data->execute();
+            $res = $data->fetch();
+            return $res;
+
+        }elseif($tbname == "product")
+        {
+            $data = $this->conn->prepare("SELECT * FROM `product` ORDER BY product_id DESC LIMIT 1");
+            $data->execute();
+            $res = $data->fetch();
+            return $res;
+
+        }elseif($tbname == "promotion")
+        {
+            $data = $this->conn->prepare("SELECT * FROM `promotion` ORDER BY promotion_id DESC LIMIT 1");
+            $data->execute();
+            $res = $data->fetch();
+            return $res;
+
+        }elseif($tbname == "promotion_log")
+        {
+            $data = $this->conn->prepare("SELECT * FROM `promotion_log` ORDER BY promotion_log_id DESC LIMIT 1");
+            $data->execute();
+            $res = $data->fetch();
+            return $res;
+
+        }elseif($tbname == "visitor_log")
+        {
+            $data = $this->conn->prepare("SELECT * FROM `visitor_log` ORDER BY modified_log_time DESC LIMIT 1");
+            $data->execute();
+            $res = $data->fetch();
+            return $res;
+
+        }else
+        {
+            return 0;
+        }
+        
+
+
     }
+
+    public function insert_promo_log($order_id,$promo_code,$token)
+    {
+        require_once("../libraries/my_functions.php");
+        $my_functions = new My_functions();
+
+        try{
+            $now_time = $my_functions->now();  
+            $com = $this->conn->prepare('INSERT INTO promotion_log VALUES(NULL , :oids, :promo_code , :timess , :token );');
+            $com->bindParam(':oids',$order_id);
+            $com->bindParam(':promo_code',$promo_code);
+            $com->bindParam(':timess',$now_time);
+            $com->bindParam(':token',$token);
+            $com->execute();
+
+            return 1;
+
+        }catch(Exception $e)
+        {
+            return $e->getMessage();
+
+        }
+
+
+    }
+
+    public function update_carts($list,$ecc_no_en)
+    {
+        try{
+            
+            $data = $this->conn->prepare("UPDATE wishlist SET package_ids = :list WHERE acc_no_encrypted = :ecc ;");
+            $data->bindParam(':list', $list);
+            $data->bindParam(':ecc', $ecc_no_en);
+            $data->execute();
+
+
+            return "updated";
+
+        }catch(Exception $e)
+        {
+            //echo "Commit Failed : " . $e->getMessage();
+            return $e->getMessage();
+
+
+        }
+
+
+    }
+
+    public function get_order_details($token_acc)
+    {
+        //SELECT * FROM `product_category` JOIN product ON product_category.category_id = product.category_id
+        $data = $this->conn->prepare("SELECT * FROM orders JOIN orders_trx ON orders.order_id = orders_trx.order_id WHERE orders.token = :tkn ORDER BY orders.order_id DESC LIMIT 1");
+        $data->bindParam(':tkn', $token_acc);
+        $data->execute();
+        $res = $data->fetchAll();
+        $ress = array("Order"=> $token_acc,"Responses"=>$res);
+
+        $pretty = json_encode($ress , JSON_PRETTY_PRINT);
+
+        return $pretty;
+
+
+    }
+
+    public function get_last_cart_list($ecc_no_en)
+    {
+        $data = $this->conn->prepare("SELECT * FROM `orders` WHERE token = :acc ORDER BY order_id DESC LIMIT 1");
+        $data->bindParam(':acc',$ecc_no_en);
+        $data->execute();
+        $res = $data->fetch();
+
+        return $res['order_packages'];
+
+    }
+    
+}
 
 
 

@@ -10,6 +10,10 @@
  require_once("libraries/my_constant.php");
  require_once("libraries/my_functions.php");
  require_once("config/Session.php");
+ require_once("config/PDOConn.php");
+ require_once("Models/CRUD.php");
+
+
 
 
  /**
@@ -29,29 +33,89 @@
   */
   
   $s = new Session();
-  Session::set_userdata('role',"visitor");
+  $cur_session = Session::get_session_id();
+  $conn = PDOConnection::getConnection();
+  $db_query = new Model($conn);
+  $_log = $db_query->check_visitor_log($cur_session);
+  $my_functions = new My_functions();
+  $cur_time = $my_functions->now();
 
-  $_ROLE = Session::userdata('role');
-  switch($_ROLE)
-  {
-    case 'member':
-        header("Location: ./Views/member/home.html");
+  /**check userdata - role */
+  /**
+   * if role is admin, then load 
+   * if role empty, then check db got session (visitor)
+   * no session , add session
+   * got session, update session date and status (visitor)
+   * 
+   */
+//check here - db visitor log 
+//if got
 
-    break;
-    case 'admin':
-        echo "admin sites";
+    if($_log == "yes")
+    {
+        $_ROLE = Session::userdata('role');
+        switch($_ROLE)
+        {
+            case 'member':
+                /**
+                 * update status 
+                 */
+                $update_log = $db_query->update_log_visitor($cur_time, 1, 1, $cur_session);
+                header("Location: ./Views/member/home.html");
 
-    break;
-    case 'visitor':
-        echo "visitor sites";
+            break;
+            case 'admin':
+                /**
+                 * update status
+                 */
+                $update_log = $db_query->update_log_visitor($cur_time, 3, 2, $cur_session);
 
-    break;
-    default:
-        echo "none";
+                header("Location: ./Views/member/home.html");
 
-    break;
+            break;
+            case 'visitor':
+                /**
+                 * 1. userdata set role and visit - session_ids
+                 */
+                $update_log = $db_query->update_log_visitor($cur_time, 2, 0, $cur_session);
 
-  }
+                header("Location: ./Views/visitor/index.html");
+
+            break;
+            default:
+            /**add
+             * session  here
+             * visitor log
+             * set userdata role and visitor 
+             */
+                echo "NO ROLE TAKEN.";
+
+            break;
+
+        }
+
+    }else
+    {
+        //if db no exsited any visitor log matched
+        //add 
+
+        $cur_session = Session::get_session_id();
+        $visitor_token = $my_functions->md5_generator($cur_session);
+        $data_insert = $db_query->insert_log_visitor($cur_session,$cur_time);
+
+        //set userdata 
+        Session::set_userdata('role',"visitor");
+        Session::set_userdata('visit',$visitor_token);
+
+
+
+
+
+    }
+  
+
+  //if not got
+  //add visitor log and set userdata - visitor
 
 /*if(file_exists(__FILE__))
 {

@@ -8,6 +8,9 @@
         <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="http://localhost/Assignment2_pizzagang/inc/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
         <script src="http://localhost/Assignment2_pizzagang/inc/js/bootstrap.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+        <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        
         <style>
             @font-face {
                 font-family: 'MyWebFont';
@@ -140,7 +143,8 @@
                        
                         
                         
-                      </div>
+                    </div>
+                    <div id="test">s</div>
                     
 
                 </div>
@@ -157,6 +161,35 @@
             4. CALL SALADS LISTINGS 
             5. CALL PASTA LISTINGS
         -->
+
+        <!--1.-->
+        <script>
+
+            var projectname = window.location.pathname;
+            var slice_projname = projectname.split("/");
+            var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+            var base_url = origin_path + '/Controllers/index.php';
+            
+            $.ajax({
+                type: "GET",
+                url: base_url,
+                data: { action : "get_all_pizza" },
+                dataType: 'JSON',
+                success: function(datas) {
+                    
+                    for(var i=0;i<datas.length;i++)
+                    {
+                        $('#test').append(datas[i].product_name);
+                    }
+                },
+                error: function() {
+                    alert('Error occured');
+                }
+            });
+        </script>
+
 
         
 

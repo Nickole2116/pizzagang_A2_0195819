@@ -19,19 +19,20 @@
             var origin_path = window.location.origin + "/" + slice_projname[1];
 
 
-            var base_url = origin_path + '/Controllers/index.php';
+            var base_url = origin_path + '/Controllers/index.php?action=login_member';
             
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: base_url,
-                data: { action : "register_member" },
+                data: { email_member : "nickoletan12@gmail.com", 
+                        password_member: "nickole@123" },
                 success: function(datas) {
                     // Run the code here that needs
                     //    to access the data returned
                     //$('#test').html(data);
                     alert(datas);
-                    var decode_rec = JSON.parse(datas);
-                    $("#test").html(decode_rec.husband);
+                    //var decode_rec = JSON.parse(datas);
+                    //$("#test").html(decode_rec.husband);
                 },
                 error: function() {
                     alert('Error occured');

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>LOGIN | MEMBER PANEL</title>
+        <title>register | MEMBER PANEL</title>
         <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         
 
     </head>
     <body>
-        this is order  page
+        this is register page
 
         <div id="test"></div>
 
@@ -19,12 +19,15 @@
             var origin_path = window.location.origin + "/" + slice_projname[1];
 
 
-            var base_url = origin_path + '/Controllers/index.php?action=add_to_cart_member';
+            var base_url = origin_path + '/Controllers/index.php?action=register_member';
             
             $.ajax({
                 type: "POST",
                 url: base_url,
-                data: { new_obj : "2" },
+                data: { new_username : "pizzagang2", 
+                        new_password: "nickole@1234",
+                        new_email : "nickoletan53@gmail.com",
+                        new_phone : "01928349381" },
                 success: function(datas) {
                     // Run the code here that needs
                     //    to access the data returned

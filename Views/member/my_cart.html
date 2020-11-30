@@ -1,42 +1,183 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>CART | MEMBER PANEL</title>
+        <title>CARTS | VISITOR PANEL</title>
+        <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com"> 
+        <link href="https://fonts.googleapis.com/css2?family=Alatsi&family=Caveat:wght@700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="http://localhost/Assignment2_pizzagang/inc/css/bootstrap.min.css">
+        <script src="http://localhost/Assignment2_pizzagang/inc/js/bootstrap.min.js" ></script>
         <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         
 
     </head>
     <body>
-        this is order  page
+        <div class="container-fluid">
+            <div class="row"> 
+                
+                <div class="col-12 col-lg-8 col-xs-12 col-sm-8" style="padding-left: 0px;padding-right: 0px;margin-left: 0px;margin-right: 0px;">
+                    <div style="background-color: #efefef;padding-left:30px;padding-top: 50px;padding-right: 30px;padding-bottom: 50px;" id="cart_page">
+                        <a href="./home.html"><button style="padding: 10px;background:none;border: none;font-size: 20px;"><svg width="30px" height="30px" viewBox="0 0 20 20" class="bi bi-arrow-left" fill="black" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                          </svg></button></a>
 
-        <div id="test"></div>
+                        <span style="font-weight:900;margin-bottom: 20px;font-size: 32px;">PIZZA CART</span>
+
+                        <br>
+                        <div class="container-fluid" id="cart_item">
+                            
+                            
+                        </div>
+
+                        <div id="test"></div>
+
+                    </div>
+                    
+                </div>
+                <div class="col-12 col-lg-4 col-xs-12 col-sm-4 bg-dark" style="padding-left: 0px;padding-right: 0px;margin-left: 0px;margin-right: 0px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                    <div id="total_page" style="padding-top: 50px;">
+                        <h4 style="margin-left: auto;margin-right: auto;text-align: center;color: gold;font-weight: bold; ">Total Amount</h4>
+                        <div style="width: 100%;background-color: rgba(255, 255, 255, 0.2);text-align: center;color: white;padding-top: 13px;padding-bottom: 10px;"><h3 style="font-weight: 900;" id="total_amount"></h3></div>
+                        <br>
+                        <div id="existed_cart_btn">
+                        <p style="text-align: center;color: gray;">* Excluded Services Charges & any Promotion Reduces.</p>
+                        <br><br>
+                        <a href="./home.html"><h6 style="color:honeydew ;text-align: center;cursor: pointer;">Back to Home</h6></a>
+                        <br>
+                        <a href="./order_confirmation.html"><button style="background-color: gold;width: 100%;border: none;padding: 20px;font-weight: 800;font-size: 19px;color: rgb(99, 74, 10);">Proceed to Next</button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
 
         <script>
 
-            var projectname = window.location.pathname;
-            var slice_projname = projectname.split("/");
-            var origin_path = window.location.origin + "/" + slice_projname[1];
 
 
-            var base_url = origin_path + '/Controllers/index.php?action=delete_cart_item';
-            
-            $.ajax({
-                type: "POST",
-                url: base_url,
-                data: { pid_delete : "2" },
-                success: function(datas) {
-                    // Run the code here that needs
-                    //    to access the data returned
-                    //$('#test').html(data);
-                    alert(datas);
-                    //var decode_rec = JSON.parse(datas);
-                    //$("#test").html(decode_rec.husband);
-                },
-                error: function() {
-                    alert('Error occured');
+                if(window.innerWidth >= 400)
+                {
+                    var screen = window.innerHeight - 0;
+                    //$('#dash_login').height(window.innerHeight);
+                    document.getElementById('cart_page').style.minHeight = screen + "px";
+
+                }else
+                {
+                    document.getElementById('cart_page').style.minHeight = "400px";
+
+
                 }
+
+               
+                
+            $(document).ready(function(){
+                empty_cart();
+                load_cart();
+
+                
+
             });
+
+            function load_cart()
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                var base_url = origin_path + '/Controllers/index.php?action=my_current_cart';
+                
+                $.ajax({
+                    type: "POST",
+                    url: base_url,
+                    dataType: 'JSON',
+                    success: function(datas) {
+                        // Run the code here that needs
+                        //    to access the data returned
+                        //$('#test').html(data);
+                        var jsonData = datas;
+                        var count = jsonData.length;
+                        var max = count - 1;
+                        for(var i = 0 ; i <= count ; i++)
+                        {
+                            //$('#cart_item').append(datas[i].Product_name + datas[max].Total);
+                            $('#cart_item').append('<div class="row"><div class="col-12 col-lg-3 col-xs-12 col-sm-4" style="padding-left: 0px;padding-right: 0px;margin-left: 0px;margin-right: 0px;">'+
+                            '<img src="http://localhost/Assignment2_pizzagang/Controllers/upload/'+datas[i].Product_image+'" width="100%" style="border-radius: 15px;"></div>'+
+                            '<div class="col-12 col-lg-7 col-xs-12 col-sm-7" style="padding-left: 10px;padding-right: 0px;margin-left: 0px;margin-right: 0px;">'+
+                            '<h5 style="font-weight: 700;margin-top: 8px;">'+datas[i].Product_name+'</h5><h5 style="font-weight: normal;">RM '+datas[i].Product_price_per+'</h5>'+
+                            '<p style="font-size: 12px;">'+datas[i].Product_desc+'</p><div style="text-align: right;">'+
+                            '<input type="number" id="counts_'+datas[i].Product_id+'" value="'+datas[i].Quality+'" style="width: 40%;border:1.5px solid black;padding:7px;text-align: center;font-weight: bold;" readonly>'+
+                            '<button onclick="delete_item_cart('+datas[i].Product_id+')" style="border-top-right-radius: 7px;border-bottom-right-radius: 7px;border: none;background-color: gold;padding:10px;"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-dash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">'+
+                            '<path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/></svg></button></div></div></div><br>');
+
+                            $('#total_amount').html('RM '+datas[max].Total.toFixed(2));
+
+
+                            
+                        }
+
+                        //$('#total_amount').html(datas[max].Total);
+                      
+
+                        
+                        
+                        //alert(datas);
+                        //var decode_rec = JSON.parse(datas);
+                        //$("#test").html(decode_rec.husband);
+                    },
+                    error: function(xhr) {
+                        alert('The Cart was Empty');
+                        document.getElementById('existed_cart_btn').style.display = "none";
+                    }
+                });
+
+            }
+
+            function delete_item_cart(val)
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                var base_url = origin_path + '/Controllers/index.php?action=delete_cart_item';
+                
+                $.ajax({
+                    type: "POST",
+                    url: base_url,
+                    data: { pid_delete : val },
+                    success: function(datas) {
+                        // Run the code here that needs
+                        //    to access the data returned
+                        //$('#test').html(data);
+                        empty_cart();
+                        load_cart();
+                        
+                        
+                        //var decode_rec = JSON.parse(datas);
+                        //$("#test").html(decode_rec.husband);
+                    },
+                    error: function() {
+                        alert('Error occured');
+                    }
+                });
+                
+
+            }
+
+            function empty_cart()
+            {
+                $('#cart_item').html('<h2></h2>');
+            }
+
+            
+
+            
         </script>
         
 

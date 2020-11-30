@@ -520,14 +520,15 @@ class Controller{
         $data = $db_query->view_my_cart($ecc_acc);
         if(empty($data))
         {
-            echo $data;
+            //echo $data;
 
         }else{
             $data_ex = json_decode($data);
             $p_array = $data_ex->Products ;
             $count_array = $data_ex->Count ;
             $total = 0;
-            
+            $return_array = array();
+
 
             //print_r($data[1]['product_name']);
 
@@ -542,15 +543,20 @@ class Controller{
                         $total += $total_per ;
 
                         /** Create array to display json format */
-                        $cur_data = array("Product Name"=>$val->product_name , 
+                        $cur_data = array("Product_id"=>$val->product_id,
+                        "Product_name"=>$val->product_name , 
+                        "Product_desc"=>$val->product_description ,
+                        "Product_image"=>$val->product_attachs ,
                         "Quality"=>$qualit , 
-                        "Product Price (Per)"=>$val->product_price,
+                        "Product_price_per"=>$val->product_price,
                         "Total"=>$total);
-                        echo json_encode($cur_data);
+                        array_push($return_array,$cur_data);
                     }
                 }
 
             }
+            echo json_encode($return_array);
+
             $service_tax_count = $total * 0.06 ; 
             $total_amount = $service_tax_count + $total;
 
@@ -636,33 +642,44 @@ class Controller{
         $visits = Session::userdata("visit");
         $en_token = Session::userdata("token");
         $promo_val = 0;
+        $return_array = array();
+
 
         //post data
         $_promocode = $_POST['promocode'];
         $_deliveryname = $_POST['deliveryname'];
         $_phone = $_POST['phone'];
+        $_email = $_POST['email'];
         $_address = $_POST['desc'];
 
         if(empty($_deliveryname))
         {
-            echo "Empty Delivery Name";
+            $return_array = array("responses"=> "Empty Delivery Name");
 
         }
         else if(empty($_phone))
         {
-            echo "Empty Phone Number";
+            $return_array = array("responses"=> "Empty Phone number");
+
+        }
+        else if(empty($_email))
+        {
+            $return_array = array("responses"=> "Empty email address");
+
 
         }
         else if(empty($_address))
         {
-            echo "Empty Address";
+            $return_array = array("responses"=> "Empty address");
+
 
             
         }
         else if(empty($_promocode))
         {
             //original price purchases
-            echo "empty promo code";
+            $return_array = array("responses"=> "Empty Promotion Code");
+
 
         }else
         {
@@ -688,7 +705,7 @@ class Controller{
                         */
                         $promo_action = "None";
                         $promo_val = 0;
-                        ECHO $promo_action;
+                        $status_promo = $promo_action;
 
 
                     }else 
@@ -696,14 +713,16 @@ class Controller{
                         //the promotion code was active in time
                         $rate = $found['promo_rate_type'] == "RM" || $found['promo_rate_type'] == "rm" ? 'RM'  : '%';
                         $promo_val = $found['rate_value'];
-                        $promo_action = "(".$found['promotion_name']." Discount )Reduce " . $rate . $promo_val ;                
+                        $promo_action = "(".$found['promotion_name']." Discount )Reduce " . $rate . $promo_val ;   
+                        $status_promo = $promo_action;               
+             
                     }
 
                 }
                 else
                 {
                     //already expired
-                    echo "The Promotion Code already Expired";
+                    $status_promo =  "The Promotion Code already Expired";
                     $promo_val = 0;
                     $promo_action = "NONE";
 
@@ -718,7 +737,7 @@ class Controller{
         $data = $db_query->view_my_cart($en_token);
         if(empty($data))
         {
-            echo $data;
+            $return_array = array("responses"=> "No Result Found");
 
         }else{
             $data_ex = json_decode($data);
@@ -744,8 +763,11 @@ class Controller{
                         "Quality"=>$qualit , 
                         "Product_Price_Per"=>$val->product_price,
                         "Total"=>$total,
-                    );
-                        //echo json_encode($cur_data);
+                        "status_promo"=>$status_promo,
+                        "reduce"=>$promo_val);
+
+                        array_push($return_array,$cur_data);
+
                     }
                 }
 
@@ -753,8 +775,10 @@ class Controller{
             $service_tax_count = $total * 0.06 ; 
             $total_amount = $service_tax_count + $total;
             $final_total_amount = $total_amount - $promo_val;
-            echo $service_tax_count;
-            echo "rm " . $final_total_amount ;
+            //echo $service_tax_count;
+            //echo "rm " . $final_total_amount ;
+
+            echo json_encode($return_array);
 
         }
 
@@ -938,6 +962,7 @@ class Controller{
         $en_token = Session::userdata("token");
         $promo_val = 0;
         $_empty_cart = "";
+        $no_member = null;
 
         //post data
         $_promocode = $_POST['promocode'];
@@ -970,7 +995,7 @@ class Controller{
              * --------------------------------------------------------------------------
              * 
              */
-             if($_promoval = "none")
+             if($_promoval == "none")
              {
                 //no used any promo code in its transactions
              }else
@@ -1179,9 +1204,18 @@ class Controller{
         $visits = Session::userdata("visit");
         $en_token = Session::userdata("token");
         $en_session = $my_functions->md5_generator($session);
+        $_empty = array();
 
         $order_trx = $db_query->view_order($en_token);
-        print_r($order_trx);
+        if(!empty($order_trx))
+        {
+            echo json_encode($order_trx);
+
+        }else
+        {
+            $_empty = array("response"=>"No Result Found");
+            echo json_encode($_empty);
+        }
 
     }
 
@@ -1254,6 +1288,37 @@ class Controller{
         $en_session = $my_functions->md5_generator($session);
 
         $list = $db_query->get_cart_by_session($session);
+
+        if(empty($list))
+        {
+            $count = 0;
+        }else{
+            $array = explode(",",$list);
+            $count = count($array);
+
+        }
+
+        
+
+        $return = array("counts"=>$count);
+        echo json_encode($return);
+
+    }
+
+    public function get_count_cart_member()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $my_functions = new My_functions();
+        $session_loads = new Session();
+        $cur_time = $my_functions->now();
+        $session = Session::get_session_id();
+        $roles = Session::userdata("role");
+        $visits = Session::userdata("visit");
+        $en_token = Session::userdata("token");
+        $en_session = $my_functions->md5_generator($session);
+
+        $list = $db_query->get_cart_by_accno($en_token);
 
         if(empty($list))
         {
@@ -1428,6 +1493,54 @@ class Controller{
 
         
 
+
+    }
+
+    function get_member_details()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $my_functions = new My_functions();
+        $session_loads = new Session();
+        $cur_time = $my_functions->now();
+        $session = Session::get_session_id();
+        $roles = Session::userdata("role");
+        $visits = Session::userdata("visit");
+        $en_token = Session::userdata("token");
+        $en_session = $my_functions->md5_generator($session);
+
+        $details = $db_query->get_user_details($en_token);
+        if(!empty($details))
+        {
+            echo json_encode($details);
+
+        }else
+        {
+            $details = array('responses'=>"Invalid Credential");
+            echo json_encode($details);
+        }
+
+    }
+
+    function logout_member()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $my_functions = new My_functions();
+        $session_loads = new Session();
+        $cur_time = $my_functions->now();
+        $session = Session::get_session_id();
+        $roles = Session::userdata("role");
+        $visits = Session::userdata("visit");
+        $en_token = Session::userdata("token");
+        $en_session = $my_functions->md5_generator($session);
+        $token = " ";
+
+        $db_query->update_log_visitor($cur_time, 2, 0, $session, $token);
+        Session::unset_userdata("token");
+        Session::set_userdata("role","visitor");
+
+        echo $roles;
 
     }
 

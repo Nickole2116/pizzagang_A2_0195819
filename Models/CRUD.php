@@ -66,6 +66,29 @@
 
         }
 
+        public function get_user_details($token)
+        {
+            /*
+            GET ALL TYPE LISTINGS
+            */
+            $data = $this->conn->prepare("SELECT * FROM `member` WHERE token = :tkn ");
+            $data->bindParam(":tkn",$token);
+            
+            $data->execute();
+            $res = $data->fetchAll();
+            if(empty($res))
+            {
+                return null;
+            }else{
+                //$ress = array("Products"=>$res);
+                //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+                
+                return $res;
+
+            }
+
+        }
+
         public function get_all_products()
         {
             /*

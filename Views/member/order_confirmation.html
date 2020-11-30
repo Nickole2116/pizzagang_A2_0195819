@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>LOGIN | MEMBER PANEL</title>
+        <title>CONFIRMATION | MEMBER PANEL</title>
         <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com"> 
+        <link href="https://fonts.googleapis.com/css2?family=Alatsi&family=Caveat:wght@700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="http://localhost/Assignment2_pizzagang/inc/css/bootstrap.min.css">
+        <script src="http://localhost/Assignment2_pizzagang/inc/js/bootstrap.min.js" ></script>
+        <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         
-
     </head>
     <body>
         <div class="container-fluid">
@@ -14,85 +21,246 @@
                 <div class="col-12 col-lg-8 col-xs-12 col-sm-8" style="padding-left: 0px;padding-right: 0px;margin-left: 0px;margin-right: 0px;">
                     <div style="background-color: #efefef;padding-left:30px;padding-top: 50px;padding-right: 30px;padding-bottom: 50px;" id="cart_page">
                         <h2 style="font-weight:900;">ORDER CONFIRMATION</h2>
+                        <div style="width: 20%;height: 10px;background-color: gold;"></div>
                         <br>
-                        <div class="container-fluid" id="cart_item">
-                            
-                            
-                        </div>
-                        <div id="test"></div>
+                        <h4 style="font-weight: bold;" id="total_amount"></h4>
+                        <h6 style="font-weight: bold;" id="sub_total_amount">Service Charges : RM 0.00</h6>
+                        <h6 style="font-weight: bold;" id="sub_amount">Service Charges : RM 0.00</h6>
+                        <h6 style="font-weight: bold;" id="promo_amount">Reduces : RM 0.00</h6>
+                        <div style="width: 70%;height: 1px;background-color: rgb(228, 227, 227);"></div>
+                        <div class="container-fluid" id="cart_item"></div>
 
                     </div>
                     
                 </div>
                 <div class="col-12 col-lg-4 col-xs-12 col-sm-4 bg-dark" style="padding-left: 0px;padding-right: 0px;margin-left: 0px;margin-right: 0px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
                     <div id="total_page" style="padding-top: 50px;">
-                        <h4 style="margin-left: auto;margin-right: auto;text-align: center;color: gold;font-weight: bold; ">Total Amount</h4>
-                        <div style="width: 100%;background-color: rgba(255, 255, 255, 0.2);text-align: center;color: white;padding-top: 13px;padding-bottom: 10px;"><h3 style="font-weight: 900;" id="total_amount"></h3></div>
                         <br>
                         <!--Delivery Detail-->
                         <div>
-                            <form>
+                            <form name="track_promo">
                                 <small style="color: ivory;"> &nbsp;Promotion Code : </small><br>
-                                <input id="promo_code" type="text" placeholder="Promotion Code (optional)" style="text-align: center;font-size: 12px;width: 90%;margin-right: 10px;padding: 10px;border-top-right-radius: 20px;border-bottom-right-radius: 20px;border:none;">
+                                <input id="promo_code" type="text" value="" name="promo_code" placeholder="Promotion Code (optional)" style="text-align: center;font-size: 12px;width: 90%;margin-right: 10px;padding: 10px;border-top-right-radius: 20px;border-bottom-right-radius: 20px;border:none;">
+                                <i class="fa fa-spinner fa-spin" style="color: burlywood;display: none;" id="loading"></i>
                                 <br><br>
 
 
                                 <small style="color: ivory;"> &nbsp;Delivery Name : </small><br>
-                                <input id="promo_code" type="text" placeholder="Your Delivery Name" style="text-align: center;font-size: 12px;width: 90%;margin-right: 10px;padding: 10px;border-top-right-radius: 20px;border-bottom-right-radius: 20px;border:none;">
+                                <input id="del_name" type="text" placeholder="Your Delivery Name" style="text-align: center;font-size: 12px;width: 90%;margin-right: 10px;padding: 10px;border-top-right-radius: 20px;border-bottom-right-radius: 20px;border:none;" required>
+                                <br><br>
+
+                                <small style="color: ivory;"> &nbsp;Address : </small><br>
+                                <input id="del_address" type="text" placeholder="Your Home Address" style="text-align: center;font-size: 12px;width: 90%;margin-right: 10px;padding: 10px;border-top-right-radius: 20px;border-bottom-right-radius: 20px;border:none;" required>
                                 <br><br>
 
 
 
                                 <small style="color: ivory;"> &nbsp;Phone Number : </small><br>
-                                <input id="promo_code" type="number" placeholder="Your Phone Number" style="text-align: center;font-size: 12px;width: 90%;margin-right: 10px;padding: 10px;border-top-right-radius: 20px;border-bottom-right-radius: 20px;border:none;">
+                                <input id="del_phone" type="number" placeholder="Your Phone Number" style="text-align: center;font-size: 12px;width: 90%;margin-right: 10px;padding: 10px;border-top-right-radius: 20px;border-bottom-right-radius: 20px;border:none;" required>
                                 <br><br>
 
 
                                 <small style="color: ivory;"> &nbsp;Email Address : </small><br>
-                                <input id="promo_code" type="email" placeholder="Your Email Address" style="text-align: center;font-size: 12px;width: 90%;margin-right: 10px;padding: 10px;border-top-right-radius: 20px;border-bottom-right-radius: 20px;border:none;">
+                                <input id="del_email" type="email" placeholder="Your Email Address" style="text-align: center;font-size: 12px;width: 90%;margin-right: 10px;padding: 10px;border-top-right-radius: 20px;border-bottom-right-radius: 20px;border:none;" required>
+                                <br><br>
+
+                                <small style="color: ivory;"> &nbsp;Descriptions : </small><br>
+                                <input id="del_desc" type="text" placeholder="(Optional)" style="text-align: center;font-size: 12px;width: 90%;margin-right: 10px;padding: 10px;border-top-right-radius: 20px;border-bottom-right-radius: 20px;border:none;">
                                 <br><br>
                             </form>
 
                         </div>
                         <br><br>
-                        <a href="./home.html"><h6 style="color:honeydew ;text-align: center;cursor: pointer;">Back to Home</h6></a>
+                        <a href="./my_carts.html"><h6 style="color:honeydew ;text-align: center;cursor: pointer;">Back to Cart</h6></a>
                         <br>
-                        <a href="./order_confirmation.html"><button style="background-color: gold;width: 100%;border: none;padding: 20px;font-weight: 800;font-size: 19px;color: rgb(99, 74, 10);">Proceed to Next</button></a>
+                        <a href="./my_order.html"><button onclick="submit_order()" id="btnSubmitOrder" style="background-color: gold;width: 100%;border: none;padding: 20px;font-weight: 800;font-size: 19px;color: rgb(99, 74, 10);">Place Order</button></a>
                     </div>
                 </div>
             </div>
         </div>
+        
+
 
         <div id="test"></div>
 
         <script>
 
-            var projectname = window.location.pathname;
-            var slice_projname = projectname.split("/");
-            var origin_path = window.location.origin + "/" + slice_projname[1];
+                if(window.innerWidth >= 400)
+                {
+                    var screen = window.innerHeight - 0;
+                    //$('#dash_login').height(window.innerHeight);
+                    document.getElementById('cart_page').style.minHeight = screen + "px";
+
+                }else
+                {
+                    document.getElementById('cart_page').style.minHeight = "400px";
 
 
-            var base_url = origin_path + '/Controllers/index.php?action=order_confirmation_member';
-            
-            $.ajax({
-                type: "POST",
-                url: base_url,
-                data: { promocode : "XXT-223",
-                        deliveryname : "Nickole Tan",
-                        phone : "0143387799",
-                        desc : "-" },
-                success: function(datas) {
-                    // Run the code here that needs
-                    //    to access the data returned
-                    //$('#test').html(data);
-                    alert(datas);
-                    //var decode_rec = JSON.parse(datas);
-                    //$("#test").html(decode_rec.husband);
-                },
-                error: function() {
-                    alert('Error occured');
                 }
-            });
+
+                $(document).ready(function(){
+                    load_confirm();
+
+                    $('#promo_code').keyup(function(){
+                        load_confirm();
+                        document.getElementById('loading').style.display = "inline-block";
+
+                    });
+
+                    $('#promo_code').focusout(function(){
+                        load_confirm();
+                        document.getElementById('loading').style.display = "none";
+
+                    });
+                })
+
+                function load_confirm()
+                {
+                    var projectname = window.location.pathname;
+                    var slice_projname = projectname.split("/");
+                    var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                    var base_url = origin_path + '/Controllers/index.php?action=order_confirmation_member';
+                    var promo_code = $('form[name="track_promo"]').find('input[name="promo_code"]').val();
+                    if(promo_code == "")
+                    {
+                        var rep_promo_code = "none";
+                    }else 
+                    {
+                        var rep_promo_code = $('form[name="track_promo"]').find('input[name="promo_code"]').val();
+
+                    }
+
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: base_url,
+                        data: { promocode : rep_promo_code,
+                                deliveryname : " ",
+                                phone : " ",
+                                email : " ",
+                                desc : " " },
+                        dataType: 'JSON',
+                        success: function(datas) {
+                            // Run the code here that needs
+                            //    to access the data returned
+                            //$('#test').html(data);
+                            var last = datas.length - 1;
+                            var total = datas[last].Total;
+                            var tax = total *0.06;
+                            var full_total = total + tax;
+                            var after_discount = full_total - datas[0].reduce;
+                            var disc = datas[0].reduce;
+                            //alert(datas[0].status_promo);
+                            $("#cart_item").html("");
+                            
+                            for(var i = 0 ; i < datas.length;i++)
+                            {
+                                $('#cart_item').append('<br><div class="row"><div class="col-3 col-lg-3 col-sm-2 col-xs-3" style="font-weight: bolder;">'+datas[i].Quality+' x'+
+                                '</div><div class="col-9 col-lg-3 col-sm-6 col-xs-9">'+datas[i].Product_Name+'<br><small style="color: burlywood;font-weight: bold;"> RM '+datas[i].Product_Price_Per+'</small></div>'+
+                                '<div class="col-12 col-lg-6 col-sm-4 col-xs-12"></div></div>');
+
+                            }
+
+                            $("#total_amount").html("Total : RM <input id='cur_total' style='background:none;border:none;font-weight:bold;' value='"+after_discount.toFixed(2)+"' readonly>");
+                            $("#sub_total_amount").html("Sub total : RM <input id='cur_sub_total' style='background:none;border:none;font-weight:bold;' value='"+total.toFixed(2)+"' readonly>");
+                            $("#sub_amount").html("Service Tax : RM <input id='cur_sub_amount' style='background:none;border:none;font-weight:bold;' value='"+tax.toFixed(2)+"' readonly>");
+                            $("#promo_amount").html("Reduces : RM <input id='cur_promo_amount' style='background:none;border:none;font-weight:bold;' value='"+disc+"' readonly>");
+
+                            if(disc > 0)
+                            {
+                                //$('#promo_code').css({'font-weight':600});
+                                setTimeout(function(){ $('#promo_code').css({'font-weight':600})}, 30);
+                                setTimeout(function(){ $('#promo_code').css({'font-weight':700})}, 60);
+                                setTimeout(function(){ $('#promo_code').css({'font-weight':800})}, 90);
+
+                                document.getElementById('loading').style.display = "none";
+
+
+                            }else{
+                                $('#promo_code').css({'font-weight':"normal"});
+
+                            }
+
+                            
+
+
+                            
+                            //var decode_rec = JSON.parse(datas);
+                            //$("#test").html(decode_rec.husband);
+                        },
+                        error: function() {
+                            alert('Empty Cart');
+                        }
+                    });
+
+                }
+
+                function submit_order()
+                {
+                    var projectname = window.location.pathname;
+                    var slice_projname = projectname.split("/");
+                    var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                    var base_url = origin_path + '/Controllers/index.php?action=submit_order_member';
+
+                    var promotion_cur_code = $('#cur_promo_amount').val();
+                    var sub_total = $('#cur_sub_total').val();
+                    var tax_total = $('#cur_sub_amount').val();
+                    var full_total = $('#cur_total').val();
+                    var del_name = $('#del_name').val();
+                    var del_home = $('#del_address').val();
+                    var del_phone = $('#del_phone').val();
+                    var del_email = $('#del_email').val();
+                    var del_desc = $('#del_desc').val();
+
+                    if(promotion_cur_code > 0)
+                    {
+                        var prom = "yes";
+                        var promocode = $('#promo_code').val();
+                    }else
+                    {
+                        var prom = "none";
+                        var promocode = "none";
+                    }
+
+                    if(del_desc == "")
+                    {
+                        del_desc = "-";
+                    }
+
+
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: base_url,
+                        data: { promocode : promocode,
+                                deliveryname : del_name,
+                                phone : del_phone,
+                                email : del_email,
+                                address : del_home,
+                                desc : del_desc,
+                                totalAmount: full_total,
+                                tax : tax_total,
+                                promoval : prom },
+                        success: function(datas) {
+                            // Run the code here that needs
+                            //    to access the data returned
+                            //$('#test').html(data);
+                            //alert(datas);
+                            window.location.href="./orders_review.html";
+                            //var decode_rec = JSON.parse(datas);
+                            //$("#test").html(decode_rec.husband);
+                        },
+                        error: function() {
+                            alert('Empty Cart');
+                        }
+                    });
+                }
+
+            
         </script>
         
 

@@ -1411,7 +1411,7 @@ class Controller{
                                                 <h5>'.$format[$i]['product_name'].' x '.$format[$i]['quality'].'</h5></div>';
                                     }
                                     
-                    echo '
+                    echo '  
                                         
                                     </div>
                                 </div>

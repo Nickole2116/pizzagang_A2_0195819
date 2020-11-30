@@ -30,6 +30,21 @@
             width:200px;
             
             }
+
+            #main_nav {
+                margin-left: auto;
+                margin-right: auto;
+            width: 80%;
+            display: flex;
+            /*flex-direction: row;*/
+            overflow-x: auto;
+            padding: 5px;
+            }
+
+            #main_nav div {
+            width:200px;
+            
+            }
         </style>
     </head>
     <body>
@@ -48,33 +63,33 @@
                 </div>
                 <div class="col-12 col-sm-12 col-xl-7 col-lg-7">
                     <div style="text-align:right;float:right;padding-top:30px;">
-                        <a style="padding-top:30px;font-family: 'Alatsi', sans-serif;">
-                        <svg style="font-size: 30px;" width="1em" height="1em" viewBox="0 0 20 20" class="bi bi-house-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <a href="./index.html" style="padding-top:30px;font-family: 'Alatsi', sans-serif;">
+                        <svg style="font-size: 30px;" width="1em" height="1em" viewBox="0 0 20 20" class="bi bi-house-fill" fill="black" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M8 3.293l6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
                             <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/>
                           </svg></a>
                         
                         &nbsp;&nbsp;&nbsp;
-                        <a style="padding-top:30px;font-family: 'Alatsi', sans-serif;cursor:pointer;">
-                        <svg style="font-size: 30px;" width="1em" height="1em" viewBox="0 0 20 20" class="bi bi-cart4" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <a href="./my_carts.html" style="padding-top:30px;font-family: 'Alatsi', sans-serif;cursor:pointer;">
+                        <svg style="font-size: 30px;" width="1em" height="1em" viewBox="0 0 20 20" class="bi bi-cart4" fill="black" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
-                          </svg>  </a>  
+                          </svg> <span id="count_carts"></span> </a>  
 
                           &nbsp;&nbsp;&nbsp;
-                        <a style="padding-top:30px;font-family: 'Alatsi', sans-serif;cursor:pointer;">
-                            <svg style="font-size: 30px;" width="1em" height="1em" viewBox="0 0 20 20" class="bi bi-truck" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <a href="./my_orders.html" style="padding-top:30px;font-family: 'Alatsi', sans-serif;cursor:pointer;">
+                            <svg style="font-size: 30px;" width="1em" height="1em" viewBox="0 0 20 20" class="bi bi-truck" fill="black" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5v-7zm1.294 7.456A1.999 1.999 0 0 1 4.732 11h5.536a2.01 2.01 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456zM12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
                               </svg>  </a>  
 
                               &nbsp;&nbsp;&nbsp;
-                        <a style="padding-top:30px;font-family: 'Alatsi', sans-serif;cursor:pointer;">
-                            <svg style="font-size: 30px;" width="1em" height="1em" viewBox="0 0 20 20" class="bi bi-upc-scan" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <a href="./order_tracks.html" style="padding-top:30px;font-family: 'Alatsi', sans-serif;cursor:pointer;">
+                            <svg style="font-size: 30px;" width="1em" height="1em" viewBox="0 0 20 20" class="bi bi-upc-scan" fill="black" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1h-3zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5zM.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5z"/>
                             <path d="M3 4.5a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7zm2 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-7zm3 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7z"/>
                             </svg> </a>  
                             &nbsp;&nbsp;&nbsp;
 
-                            <button style="border:0px solid black;background-image: linear-gradient(211deg,#ffcf18, #ff8818);border-radius: 5px;font-family: 'Alatsi', sans-serif;">&nbsp;&nbsp;<b>Log In</b>&nbsp;&nbsp;</button>
+                            <a href="../member/login.html"><button style="border:0px solid black;background-image: linear-gradient(211deg,#ffcf18, #ff8818);border-radius: 5px;font-family: 'Alatsi', sans-serif;">&nbsp;&nbsp;<b>Log In</b>&nbsp;&nbsp;</button></a>
 
                     </div>
                    
@@ -98,14 +113,6 @@
                           </svg>&nbsp;&nbsp; Trends</h4>
 
                           <div id="main">
-                            <div style="margin-right: 10px;"><div style="text-align:left;background:#fcfbfc;margin: 5px 10px 5px 10px;  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);padding:10%;font-weight: bold;
-                                "><h4 style="font-weight:bold;font-family: 'Alatsi', sans-serif;">RM 20 &nbsp;&nbsp;<small><sup><mark style="background-color: #ffcd3e;border-radius: 7px;"> Available </mark></sup></small></h4>Welcome Discount weferfefssef<br><small>* MIN SPEND RM5</small><button style="margin-top: 10px;width: 100%;background: gold;border: 4px solid gold;border-radius: 5px;"><b>Claim Now</b></button></div></div>
-                            <div style="margin-right: 10px;"><div style="background:black;margin: 5px 10px 5px 10px;">testing</div></div>
-                            <div style="margin-right: 10px;"><div style="background:black;margin: 5px 10px 5px 10px;">testing</div></div>
-                            <div style="margin-right: 10px;"><div style="background:black;margin: 5px 10px 5px 10px;">testing</div></div>
-                            <div style="margin-right: 10px;"><div style="background:black;margin: 5px 10px 5px 10px;">testing</div></div>
-                            <div style="margin-right: 10px;"><div style="background:black;margin: 5px 10px 5px 10px;">testing</div></div>
-                            
                             
                             
                            
@@ -132,25 +139,66 @@
 
                     </div>
                     <!--image slider-->
-                    <div id="main" style="text-align: center;">
-                        <div style="margin-right: 10px;">Pizzas</div>
-                        <div style="margin-right: 10px;">Salads</div>
-                        <div style="margin-right: 10px;">Beverages</div>
-                        <div style="margin-right: 10px;">Pastas</div>
-
-                       
-                        
-                       
-                        
+                    <div id="main_nav" style="text-align: center;">
+                        <div onclick="open_platform(1)" id="sel_all" style="margin-right: 10px;cursor:pointer"><img src="http://localhost/Assignment2_pizzagang/inc/images/all_logo.png" width="50px" height="50px"><br>All</div>
+                        <div onclick="open_platform(2)" id="sel_pizza" style="margin-right: 10px;cursor:pointer"><img src="http://localhost/Assignment2_pizzagang/inc/images/pizza_logo.png" width="50px" height="50px"><br>Pizzas</div>
+                        <div onclick="open_platform(3)" id="sel_salad" style="margin-right: 10px;cursor:pointer"><img src="http://localhost/Assignment2_pizzagang/inc/images/salads_logo.png" width="50px" height="50px"><br>Salads</div>
+                        <div onclick="open_platform(4)" id="sel_beverage" style="margin-right: 10px;cursor:pointer"><img src="http://localhost/Assignment2_pizzagang/inc/images/bev_logo.png" width="40px" height="50px"><br>Beverages</div>
+                        <div onclick="open_platform(5)" id="sel_dessert" style="margin-right: 10px;cursor:pointer"><img src="http://localhost/Assignment2_pizzagang/inc/images/dessert_logo.png" width="40px" height="50px"><br>Desserts</div> 
+                        <div onclick="open_platform(6)" id="sel_sides" style="margin-right: 10px;cursor:pointer"><img src="http://localhost/Assignment2_pizzagang/inc/images/pasta_logo.png" width="50px" height="50px"><br>Sides</div> 
                         
                     </div>
-                    <div id="test">s</div>
+                    <div style="width: 100%;height: 2px;background-color: rgb(241, 236, 236);margin-bottom: 20px;margin-top: 20px;"></div>
+                    <div style="text-align: right;padding-right: 50px;padding-bottom: 20px;"><a style="padding-top:30px;font-family: 'Alatsi', sans-serif;cursor:pointer;"><span id="success_addcart" style="display: none;color: goldenrod;font-weight: bold;">+ 1 item</span>&nbsp;<span id="count_cart"></span>
+                        <svg style="font-size: 30px;" width="1em" height="1em" viewBox="0 0 20 20" class="bi bi-cart4" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                          </svg>  </a> </div>
+
+                    <div class="container">
+                        <div class="row" id="pizza_list" style="display: none;">
+                            
+                        </div>
+                        
+                    </div>
+                    <div class="container">
+                        <div class="row" id="all_list">
+                            
+                        </div>
+                        
+                    </div>
+                    <div class="container">
+                        <div class="row" id="salad_list" style="display: none;">
+                            
+                        </div>
+                        
+                    </div>
+                    <div class="container">
+                        <div class="row" id="bev_list" style="display: none;">
+                            
+                        </div>
+                        
+                    </div>
+                    <div class="container">
+                        <div class="row" id="dessert_list" style="display: none;">
+                            
+                        </div>
+                        
+                    </div>
+                    <div class="container">
+                        <div class="row" id="sides_list" style="display: none;">
+                            
+                        </div>
+                        
+                    </div>
+                    
+                    
                     
 
                 </div>
 
             </div>
         </div>
+        
 
         <!--
             AJAX CALL
@@ -165,29 +213,505 @@
         <!--1.-->
         <script>
 
-            var projectname = window.location.pathname;
-            var slice_projname = projectname.split("/");
-            var origin_path = window.location.origin + "/" + slice_projname[1];
+            //window focus then update 
+            $(window).on('focus',function(){
+                load_cart_count();
 
-
-            var base_url = origin_path + '/Controllers/index.php';
-            
-            $.ajax({
-                type: "GET",
-                url: base_url,
-                data: { action : "get_all_pizza" },
-                dataType: 'JSON',
-                success: function(datas) {
-                    
-                    for(var i=0;i<datas.length;i++)
-                    {
-                        $('#test').append(datas[i].product_name);
-                    }
-                },
-                error: function() {
-                    alert('Error occured');
-                }
             });
+
+            $(document).ready(function(){
+
+                load_all_pizza();
+                load_all_prod();
+                load_all_salads();
+                load_all_bev();
+                load_all_desserts();
+                load_all_sides();
+                load_promotion();
+                load_cart_count();
+                
+                
+
+
+            });
+
+            function open_platform(val)
+            {
+                switch(val)
+                {
+                    case 1:
+                        document.getElementById('all_list').style.display = "-webkit-flex";
+                        document.getElementById('pizza_list').style.display = "none";
+                        document.getElementById('salad_list').style.display = "none";
+                        document.getElementById('bev_list').style.display = "none";
+                        document.getElementById('dessert_list').style.display = "none";
+                        document.getElementById('sides_list').style.display = "none";
+
+                        document.getElementById('sel_all').style.fontWeight = "bold";
+                        document.getElementById('sel_pizza').style.fontWeight = "normal";
+                        document.getElementById('sel_salad').style.fontWeight = "normal";
+                        document.getElementById('sel_beverage').style.fontWeight = "normal";
+                        document.getElementById('sel_dessert').style.fontWeight = "normal";
+                        document.getElementById('sel_sides').style.fontWeight = "normal";
+
+
+
+
+                    break;
+                    case 2:
+                        document.getElementById('all_list').style.display = "none";
+                        document.getElementById('pizza_list').style.display = "-webkit-flex";
+                        document.getElementById('salad_list').style.display = "none";
+                        document.getElementById('bev_list').style.display = "none";
+                        document.getElementById('dessert_list').style.display = "none";
+                        document.getElementById('sides_list').style.display = "none";
+
+                        document.getElementById('sel_all').style.fontWeight = "normal";
+                        document.getElementById('sel_pizza').style.fontWeight = "bold";
+                        document.getElementById('sel_salad').style.fontWeight = "normal";
+                        document.getElementById('sel_beverage').style.fontWeight = "normal";
+                        document.getElementById('sel_dessert').style.fontWeight = "normal";
+                        document.getElementById('sel_sides').style.fontWeight = "normal";
+
+                    break;
+                    case 3:
+                        document.getElementById('all_list').style.display = "none";
+                        document.getElementById('pizza_list').style.display = "none";
+                        document.getElementById('salad_list').style.display = "-webkit-flex";
+                        document.getElementById('bev_list').style.display = "none";
+                        document.getElementById('dessert_list').style.display = "none";
+                        document.getElementById('sides_list').style.display = "none";
+
+                        document.getElementById('sel_all').style.fontWeight = "normal";
+                        document.getElementById('sel_pizza').style.fontWeight = "normal";
+                        document.getElementById('sel_salad').style.fontWeight = "bold";
+                        document.getElementById('sel_beverage').style.fontWeight = "normal";
+                        document.getElementById('sel_dessert').style.fontWeight = "normal";
+                        document.getElementById('sel_sides').style.fontWeight = "normal";
+
+                    break;
+                    case 4:
+                        document.getElementById('all_list').style.display = "none";
+                        document.getElementById('pizza_list').style.display = "none";
+                        document.getElementById('salad_list').style.display = "none";
+                        document.getElementById('bev_list').style.display = "-webkit-flex";
+                        document.getElementById('dessert_list').style.display = "none";
+                        document.getElementById('sides_list').style.display = "none";
+
+                        document.getElementById('sel_all').style.fontWeight = "normal";
+                        document.getElementById('sel_pizza').style.fontWeight = "normal";
+                        document.getElementById('sel_salad').style.fontWeight = "normal";
+                        document.getElementById('sel_beverage').style.fontWeight = "bold";
+                        document.getElementById('sel_dessert').style.fontWeight = "normal";
+                        document.getElementById('sel_sides').style.fontWeight = "normal";
+
+                    break;
+                    case 5:
+                        document.getElementById('all_list').style.display = "none";
+                        document.getElementById('pizza_list').style.display = "none";
+                        document.getElementById('salad_list').style.display = "none";
+                        document.getElementById('bev_list').style.display = "none";
+                        document.getElementById('dessert_list').style.display = "-webkit-flex";
+                        document.getElementById('sides_list').style.display = "none";
+
+                        document.getElementById('sel_all').style.fontWeight = "normal";
+                        document.getElementById('sel_pizza').style.fontWeight = "normal";
+                        document.getElementById('sel_salad').style.fontWeight = "normal";
+                        document.getElementById('sel_beverage').style.fontWeight = "normal";
+                        document.getElementById('sel_dessert').style.fontWeight = "bold";
+                        document.getElementById('sel_sides').style.fontWeight = "normal";
+
+                    break;
+                    case 6:
+                        document.getElementById('all_list').style.display = "none";
+                        document.getElementById('pizza_list').style.display = "none";
+                        document.getElementById('salad_list').style.display = "none";
+                        document.getElementById('bev_list').style.display = "none";
+                        document.getElementById('dessert_list').style.display = "none";
+                        document.getElementById('sides_list').style.display = "-webkit-flex";
+
+                        document.getElementById('sel_all').style.fontWeight = "normal";
+                        document.getElementById('sel_pizza').style.fontWeight = "normal";
+                        document.getElementById('sel_salad').style.fontWeight = "normal";
+                        document.getElementById('sel_beverage').style.fontWeight = "normal";
+                        document.getElementById('sel_dessert').style.fontWeight = "normal";
+                        document.getElementById('sel_sides').style.fontWeight = "bold";
+
+                    break;
+
+
+                }
+            }
+
+            function load_promotion()
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                var base_url = origin_path + '/Controllers/index.php';
+                
+                $.ajax({
+                    type: "GET",
+                    url: base_url,
+                    data: { action : "get_all_available_pizza_limit" },
+                    dataType: 'JSON',
+                    success: function(datas) {
+                        
+                           
+                        for(var i=0;i<datas.length;i++)
+                        {
+                            $('#main').append('<div style="margin-right: 10px;"><div style="min-height:240px;text-align:left;background:#fcfbfc;margin: 5px 10px 5px 10px;  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);padding:10%;font-weight: bold;"><h4 style="font-weight:bold;font-family: "Alatsi", sans-serif;">RM '+datas[i].rate_value+' &nbsp;&nbsp;<small><sup><mark style="background-color: #ffcd3e;border-radius: 7px;"> Available </mark></sup></small></h4>'+datas[i].promotion_name+'<br><small>'+datas[i].descriptions+'</small><button style="margin-top: 10px;width: 100%;background: gold;border: 4px solid gold;border-radius: 5px;"><b>Claim Now</b></button></div></div>');
+                            //alert(datas[i].promotion_name);
+                        }
+                        
+                    },
+                    error: function() {
+                        alert('Error occured');
+                    }
+                });
+
+            }
+
+            function load_all_pizza()
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                var base_url = origin_path + '/Controllers/index.php';
+                
+                $.ajax({
+                    type: "GET",
+                    url: base_url,
+                    data: { action : "get_all_pizza" },
+                    dataType: 'JSON',
+                    success: function(datas) {
+
+                        if(datas.Response == "No Result Found")
+                        {
+                            $('#pizza_list').append('<span>'+datas.Response+'</span>');
+
+                        }else
+                        {
+                            for(var i=0;i<datas.length;i++)
+                            {
+                                //$('#pizza_list').append(datas[i].product_name + datas[i].product_description);
+                                $('#pizza_list').append('<div class="col-10 col-xs-6 col-sm-6 col-lg-3"><div style="background: white;margin-bottom:15px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);text-align: center;border-radius: 10px;padding: 0px;">'+
+                                '<img src="http://localhost/Assignment2_pizzagang/Controllers/upload/'+datas[i].product_attachs+'" width="100%" style="border-top-left-radius: 10px;border-top-right-radius: 10px;">'+
+                                '<div style="margin-top: 14px;margin-left: 7px;margin-right: 7px;"><span><b>'+datas[i].product_name+'</b></span><p style="text-align: center;font-size: 9px;">'+datas[i].product_description+'</p>'+
+                                '<div style="width: 100%;height: 0.5px;background-color: #ecf2fc;margin-bottom: 3px;"></div><button onclick="add_cart('+datas[i].product_id+')" style="margin: 0px;width: 100%;border-top-left-radius: 20px;border-top-right-radius: 20px;border: none;font-weight: bold;background-color: gold;">'+
+                                '<svg width="1em" height="1em" viewBox="0 0 20 20" class="bi bi-plus-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>'+
+                                '</svg> RM '+datas[i].product_price+'</button></div></div></div>');
+
+                            }
+
+                        }
+                        
+                        
+                    },
+                    error: function() {
+                        alert('Error occured');
+                    }
+                });
+
+            }
+
+            
+            function load_all_prod()
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                var base_url = origin_path + '/Controllers/index.php';
+                
+                $.ajax({
+                    type: "GET",
+                    url: base_url,
+                    data: { action : "get_all_prod" },
+                    dataType: 'JSON',
+                    success: function(datas) {
+
+                        if(datas.Response == "No Result Found")
+                        {
+                            $('#all_list').append('<span>'+datas.Response+'</span>');
+
+                        }else
+                        {
+                            for(var i=0;i<datas.length;i++)
+                            {
+                                //$('#pizza_list').append(datas[i].product_name + datas[i].product_description);
+                                $('#all_list').append('<div class="col-10 col-xs-6 col-sm-6 col-lg-3"><div style="background: white;margin-bottom:15px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);text-align: center;border-radius: 10px;padding: 0px;">'+
+                                '<img src="http://localhost/Assignment2_pizzagang/Controllers/upload/'+datas[i].product_attachs+'" width="100%" style="border-top-left-radius: 10px;border-top-right-radius: 10px;">'+
+                                '<div style="margin-top: 14px;margin-left: 7px;margin-right: 7px;"><span><b>'+datas[i].product_name+'</b></span><p style="text-align: center;font-size: 9px;">'+datas[i].product_description+'</p>'+
+                                '<div style="width: 100%;height: 0.5px;background-color: #ecf2fc;margin-bottom: 3px;"></div><button onclick="add_cart('+datas[i].product_id+')" style="margin: 0px;width: 100%;border-top-left-radius: 20px;border-top-right-radius: 20px;border: none;font-weight: bold;background-color: gold;">'+
+                                '<svg width="1em" height="1em" viewBox="0 0 20 20" class="bi bi-plus-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>'+
+                                '</svg> RM '+datas[i].product_price+'</button></div></div></div>');
+
+                            }
+
+                        }
+                        
+                        
+                    },
+                    error: function() {
+                        alert('Error occured');
+                    }
+                });
+
+            }
+
+            function load_all_salads()
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                var base_url = origin_path + '/Controllers/index.php';
+                
+                $.ajax({
+                    type: "GET",
+                    url: base_url,
+                    data: { action : "get_all_salads" },
+                    dataType: 'JSON',
+                    success: function(datas) {
+
+                        if(datas.Response == "No Result Found")
+                        {
+                            $('#salad_list').append('<span>'+datas.Response+'</span>');
+
+                        }else
+                        {
+                            for(var i=0;i<datas.length;i++)
+                            {
+                                //$('#pizza_list').append(datas[i].product_name + datas[i].product_description);
+                                $('#salad_list').append('<div class="col-10 col-xs-6 col-sm-6 col-lg-3"><div style="background: white;margin-bottom:15px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);text-align: center;border-radius: 10px;padding: 0px;">'+
+                                '<img src="http://localhost/Assignment2_pizzagang/Controllers/upload/'+datas[i].product_attachs+'" width="100%" style="border-top-left-radius: 10px;border-top-right-radius: 10px;">'+
+                                '<div style="margin-top: 14px;margin-left: 7px;margin-right: 7px;"><span><b>'+datas[i].product_name+'</b></span><p style="text-align: center;font-size: 9px;">'+datas[i].product_description+'</p>'+
+                                '<div style="width: 100%;height: 0.5px;background-color: #ecf2fc;margin-bottom: 3px;"></div><button onclick="add_cart('+datas[i].product_id+')" style="margin: 0px;width: 100%;border-top-left-radius: 20px;border-top-right-radius: 20px;border: none;font-weight: bold;background-color: gold;">'+
+                                '<svg width="1em" height="1em" viewBox="0 0 20 20" class="bi bi-plus-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>'+
+                                '</svg> RM '+datas[i].product_price+'</button></div></div></div>');
+
+                            }
+
+                        }
+                        
+                        
+                    },
+                    error: function() {
+                        alert('Error occured');
+                    }
+                });
+
+            }
+
+            function load_all_bev()
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                var base_url = origin_path + '/Controllers/index.php';
+                
+                $.ajax({
+                    type: "GET",
+                    url: base_url,
+                    data: { action : "get_all_beverages" },
+                    dataType: 'JSON',
+                    success: function(datas) {
+
+                        if(datas.Response == "No Result Found")
+                        {
+                            $('#bev_list').append('<span>'+datas.Response+'</span>');
+
+                        }else
+                        {
+                            for(var i=0;i<datas.length;i++)
+                            {
+                                //$('#pizza_list').append(datas[i].product_name + datas[i].product_description);
+                                $('#bev_list').append('<div class="col-10 col-xs-6 col-sm-6 col-lg-3"><div style="background: white;margin-bottom:15px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);text-align: center;border-radius: 10px;padding: 0px;">'+
+                                '<img src="http://localhost/Assignment2_pizzagang/Controllers/upload/'+datas[i].product_attachs+'" width="100%" style="border-top-left-radius: 10px;border-top-right-radius: 10px;">'+
+                                '<div style="margin-top: 14px;margin-left: 7px;margin-right: 7px;"><span><b>'+datas[i].product_name+'</b></span><p style="text-align: center;font-size: 9px;">'+datas[i].product_description+'</p>'+
+                                '<div style="width: 100%;height: 0.5px;background-color: #ecf2fc;margin-bottom: 3px;"></div><button onclick="add_cart('+datas[i].product_id+')" style="margin: 0px;width: 100%;border-top-left-radius: 20px;border-top-right-radius: 20px;border: none;font-weight: bold;background-color: gold;">'+
+                                '<svg width="1em" height="1em" viewBox="0 0 20 20" class="bi bi-plus-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>'+
+                                '</svg> RM '+datas[i].product_price+'</button></div></div></div>');
+
+                            }
+
+                        }
+                        
+                        
+                    },
+                    error: function() {
+                        alert('Error occured');
+                    }
+                });
+
+            }
+
+            function load_all_desserts()
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                var base_url = origin_path + '/Controllers/index.php';
+                
+                $.ajax({
+                    type: "GET",
+                    url: base_url,
+                    data: { action : "get_all_desserts" },
+                    dataType: 'JSON',
+                    success: function(datas) {
+
+                        if(datas.Response == "No Result Found")
+                        {
+                            $('#dessert_list').append('<span>'+datas.Response+'</span>');
+
+                        }else
+                        {
+                            for(var i=0;i<datas.length;i++)
+                            {
+                                //$('#pizza_list').append(datas[i].product_name + datas[i].product_description);
+                                $('#dessert_list').append('<div class="col-10 col-xs-6 col-sm-6 col-lg-3"><div style="background: white;margin-bottom:15px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);text-align: center;border-radius: 10px;padding: 0px;">'+
+                                '<img src="http://localhost/Assignment2_pizzagang/Controllers/upload/'+datas[i].product_attachs+'" width="100%" style="border-top-left-radius: 10px;border-top-right-radius: 10px;">'+
+                                '<div style="margin-top: 14px;margin-left: 7px;margin-right: 7px;"><span><b>'+datas[i].product_name+'</b></span><p style="text-align: center;font-size: 9px;">'+datas[i].product_description+'</p>'+
+                                '<div style="width: 100%;height: 0.5px;background-color: #ecf2fc;margin-bottom: 3px;"></div><button onclick="add_cart('+datas[i].product_id+')" style="margin: 0px;width: 100%;border-top-left-radius: 20px;border-top-right-radius: 20px;border: none;font-weight: bold;background-color: gold;">'+
+                                '<svg width="1em" height="1em" viewBox="0 0 20 20" class="bi bi-plus-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>'+
+                                '</svg> RM '+datas[i].product_price+'</button></div></div></div>');
+
+                            }
+
+                        }
+                        
+                        
+                    },
+                    error: function() {
+                        alert('Error occured');
+                    }
+                });
+
+            }
+
+            function load_all_sides()
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                var base_url = origin_path + '/Controllers/index.php';
+                
+                $.ajax({
+                    type: "GET",
+                    url: base_url,
+                    data: { action : "get_all_sides" },
+                    dataType: 'JSON',
+                    success: function(datas) {
+
+                        if(datas.Response == "No Result Found")
+                        {
+                            $('#sides_list').append('<h4 style="text-align:center;font-weight:bold;width:100%">'+datas.Response+'</h4><br><br>');
+
+                        }else
+                        {
+                            for(var i=0;i<datas.length;i++)
+                            {
+                                //$('#pizza_list').append(datas[i].product_name + datas[i].product_description);
+                                $('#sides_list').append('<div class="col-10 col-xs-6 col-sm-6 col-lg-3"><div style="background: white;margin-bottom:15px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);text-align: center;border-radius: 10px;padding: 0px;">'+
+                                '<img src="http://localhost/Assignment2_pizzagang/Controllers/upload/'+datas[i].product_attachs+'" width="100%" style="border-top-left-radius: 10px;border-top-right-radius: 10px;">'+
+                                '<div style="margin-top: 14px;margin-left: 7px;margin-right: 7px;"><span><b>'+datas[i].product_name+'</b></span><p style="text-align: center;font-size: 9px;">'+datas[i].product_description+'</p>'+
+                                '<div style="width: 100%;height: 0.5px;background-color: #ecf2fc;margin-bottom: 3px;"></div><button onclick="add_cart('+datas[i].product_id+')" style="margin: 0px;width: 100%;border-top-left-radius: 20px;border-top-right-radius: 20px;border: none;font-weight: bold;background-color: gold;">'+
+                                '<svg width="1em" height="1em" viewBox="0 0 20 20" class="bi bi-plus-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>'+
+                                '</svg> RM '+datas[i].product_price+'</button></div></div></div>');
+
+                            }
+
+                        }
+                        
+                        
+                    },
+                    error: function() {
+                        alert('Error occured');
+                    }
+                });
+
+            }
+
+            
+
+            function load_cart_count()
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+                var base_url = origin_path + '/Controllers/index.php';
+                
+                $.ajax({
+                    type: "GET",
+                    url: base_url,
+                    data: { action : "get_count_cart_visitor" },
+                    dataType: 'JSON',
+                    success: function(datas) {
+
+                        //get count from cart
+                        $('#count_cart').html(datas.counts + " items");
+                        $('#count_carts').html('<mark style="background:gold;border-radius:5px">'+datas.counts+'</mark>');
+
+                        
+                        
+                    },
+                    error: function() {
+                        alert('Error occured');
+                    }
+                });
+
+
+
+            }
+
+            function add_cart(val)
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                var base_url = origin_path + '/Controllers/index.php?action=add_to_cart';
+                
+                $.ajax({
+                    type: "POST",
+                    url: base_url,
+                    data: { new_obj : val },
+                    dataType:'JSON',
+                    success: function(datas) {
+                        // Run the code here that needs
+                        //    to access the data returned
+                        //$('#test').html(data);
+                        
+                        if(datas.responses == "updated")
+                        {
+                            $('#success_addcart').fadeIn('slow').delay(2000).fadeOut('slow');
+                            load_cart_count();
+                            
+                        }
+                        //var decode_rec = JSON.parse(datas);
+                        //$("#test").html(decode_rec.husband);
+                    },
+                    error: function() {
+                        alert('Error occured');
+                    }
+                });
+            }
+
+            
         </script>
 
 

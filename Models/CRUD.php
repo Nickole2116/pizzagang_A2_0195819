@@ -24,8 +24,22 @@
             return $this->conn->query("SELECT * FROM admin");
         }
 
-        public function get_discount_listings()
+        public function get_discount_listings_limit_5()
         {
+            $data = $this->conn->prepare("SELECT * FROM `promotion` JOIN promotion_rate ON promotion.promotion_rate_id = promotion_rate.promo_rate_id ");            
+            $data->execute();
+            $res = $data->fetchAll();
+            if(empty($res))
+            {
+                return null;
+            }else{
+                //$ress = array("Products"=>$res);
+                //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+                
+                return $res;
+
+            }
+
 
         }
 
@@ -34,9 +48,30 @@
             /*
             GET ALL TYPE LISTINGS
             */
-            $data = $this->conn->prepare("SELECT product.product_id , product.product_name , product.product_description , product.product_price , product_category.category_name FROM `product_category` JOIN product ON product_category.category_id = product.category_id WHERE product_category.category_id = :types ");
+            $data = $this->conn->prepare("SELECT product.product_id , product.product_name , product.product_description , product.product_attachs,  product.product_price , product_category.category_name FROM `product_category` JOIN product ON product_category.category_id = product.category_id WHERE product_category.category_id = :types ");
             $data->bindParam(":types",$types);
             
+            $data->execute();
+            $res = $data->fetchAll();
+            if(empty($res))
+            {
+                return null;
+            }else{
+                //$ress = array("Products"=>$res);
+                //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+                
+                return $res;
+
+            }
+
+        }
+
+        public function get_all_products()
+        {
+            /*
+            GET ALL TYPE LISTINGS
+            */
+            $data = $this->conn->prepare("SELECT product.product_id , product.product_name , product.product_description , product.product_attachs,  product.product_price , product_category.category_name FROM `product_category` JOIN product ON product_category.category_id = product.category_id ");            
             $data->execute();
             $res = $data->fetchAll();
             if(empty($res))
@@ -613,11 +648,8 @@
 
             $data->execute();
             $res = $data->fetchAll();
-            $ress = array("Order"=> $token_acc,"Responses"=>$res);
 
-            $pretty = json_encode($ress , JSON_PRETTY_PRINT);
-
-            return $pretty;
+            return $res;
 
         }
 
@@ -755,41 +787,50 @@
             }else if($role == "visitor")
             {
                 //if visitor
+                
                 $lists = self::get_cart_by_session($acc_session_val);
-                $conv_array = explode(",",$lists);
-                $count_each = array_count_values($conv_array);
-
-                if(array_key_exists($pids_del,$count_each))
+                if(empty($lists))
                 {
-                    //check value isnt more than one?
-                    $count_del_item = $count_each[$pids_del];
-                    if($count_del_item > 1)
-                    {
-                        $latest_value = $count_del_item -1;
-                        $count_each[$pids_del] = $latest_value;
-                       
-                    }else
-                    {
-                        //only one
-                        //direct unset the del_item
-                        unset($count_each[$pids_del]);
-                    }
-                    $new_list = array();
-                    foreach($count_each as $val => $count)
-                    {
-                        for($i = 1; $i <= $count ; $i++)
-                        {
-                            array_push($new_list,$val);
-                        }
-                    }
-                    $new_list_conv = implode(",",$new_list);
-                    $res = self::update_cart_visitor($new_list_conv,$acc_session_val,$nows);
-                    return $res;
+                    echo "empty list";
 
                 }else
                 {
-                    echo "no match";
+                    $conv_array = explode(",",$lists);
+                    $count_each = array_count_values($conv_array);
+
+                    if(array_key_exists($pids_del,$count_each))
+                    {
+                        //check value isnt more than one?
+                        $count_del_item = $count_each[$pids_del];
+                        if($count_del_item > 1)
+                        {
+                            $latest_value = $count_del_item -1;
+                            $count_each[$pids_del] = $latest_value;
+                        
+                        }else
+                        {
+                            //only one
+                            //direct unset the del_item
+                            unset($count_each[$pids_del]);
+                        }
+                        $new_list = array();
+                        foreach($count_each as $val => $count)
+                        {
+                            for($i = 1; $i <= $count ; $i++)
+                            {
+                                array_push($new_list,$val);
+                            }
+                        }
+                        $new_list_conv = implode(",",$new_list);
+                        $res = self::update_cart_visitor($new_list_conv,$acc_session_val,$nows);
+                        return $res;
+
+                    }else
+                    {
+                        echo "no match";
+                    }
                 }
+                
 
 
             }else
@@ -802,8 +843,47 @@
 
         }
 
-        public function order_submit_visitor()
+        public function order_submit_visitor($name, $email, $phone, $address, $total, $taxs, $desc,$en_acc_no,$sess)
         {
+            require_once("../libraries/my_functions.php");
+            $my_functions = new My_functions();
+            $lists = self::get_cart_by_session($sess);
+            if(!empty($lists))
+            {
+                try{
+                    $ref_id_gen = uniqid();
+                    $now_time = $my_functions->now(); 
+                    $com = $this->conn->prepare('INSERT INTO orders VALUES(NULL, :ref, :na, :list, :email , :phone , :addresses , :noww , :total , :tax , :descri , :tokens );');
+                    $com->bindParam(':ref',$ref_id_gen);
+                    $com->bindParam(':na',$name);
+                    $com->bindParam(':list',$lists);
+                    $com->bindParam(':email',$email);
+                    $com->bindParam(':phone',$phone);
+                    $com->bindParam(':addresses',$address);
+                    $com->bindParam(':noww',$now_time);
+                    $com->bindParam(':total',$total);
+                    $com->bindParam(':tax',$taxs);
+                    $com->bindParam(':descri',$desc);
+                    $com->bindParam(':tokens',$en_acc_no);
+        
+        
+                    $com->execute();
+                    
+                    return "insert";
+        
+                }catch(Exception $e)
+                {
+                    return $e->getMessage();
+        
+                }
+        
+
+
+            }else 
+            {
+                echo "Error Occured : Empty" ;
+            }
+            return $lists;
 
         }
 
@@ -1034,6 +1114,8 @@
         return $res['order_packages'];
 
     }
+
+   
     
 }
 

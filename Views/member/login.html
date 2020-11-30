@@ -4,40 +4,199 @@
         <title>LOGIN | MEMBER PANEL</title>
         <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="http://localhost/Assignment2_pizzagang/inc/js/bootstrap.min.js"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com"> 
+        <link href="https://fonts.googleapis.com/css2?family=Alatsi&family=Caveat:wght@700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="http://localhost/Assignment2_pizzagang/inc/css/bootstrap.min.css" >
+        <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
         
 
     </head>
-    <body>
-        this is login page
-
-        <div id="test"></div>
-
-        <script>
-
-            var projectname = window.location.pathname;
-            var slice_projname = projectname.split("/");
-            var origin_path = window.location.origin + "/" + slice_projname[1];
-
-
-            var base_url = origin_path + '/Controllers/index.php?action=login_member';
+    <body style="background-color:whitesmoke">
+        
+        <form name="login_member">
             
-            $.ajax({
-                type: "POST",
-                url: base_url,
-                data: { email_member : "nickoletan12@gmail.com", 
-                        password_member: "nickole@123" },
-                success: function(datas) {
-                    // Run the code here that needs
-                    //    to access the data returned
-                    //$('#test').html(data);
-                    alert(datas);
-                    //var decode_rec = JSON.parse(datas);
-                    //$("#test").html(decode_rec.husband);
-                },
-                error: function() {
-                    alert('Error occured');
+            <div class="container-fluid" style="padding-right:3px;padding-left: 3px;margin-left: 3px;margin-right: 3px;">
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-lg-4 col-sm-5" >
+                        <div>
+                            <div id="dash_login" style="background-image:linear-gradient(45deg, #ffe324,#ffb533);width:100%;height:600px;border-radius:5px;text-align: center;" >
+                                <h2 style="text-align:center;padding-top:80px;color:seashell"><mark style="background:white;color:#ffb533;border-top-left-radius: 15px;border-bottom-right-radius: 15px;"><b>&nbsp;Welcome .</b></mark></h2>
+                                
+                                <img src="http://localhost/Assignment2_pizzagang/inc/gif/black_cat_logo.gif" width="100%">
+                                <aside style="margin: 20px;">
+                                    <span> Sign In to get touch the access pages and more discounts .</span>
+                                    <br><br>
+                                </aside>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 col-sm-5 col-xs-12" >
+                        <br><br>
+                        <h2 style="font-weight: bold;">Login Now</h2>
+                        <br>
+                        <span id="demo" style="font-weight: bold;margin-top: 60px;font-size: 1.35rem;"></span>
+
+                            <input type="text" name="email_members" id="email_member" placeholder="Email Address" style="margin-bottom: 10px;margin-top:10px;display: none;background: none;border: none;padding: 10px;border-bottom: 4px solid tan;width: 50%;">
+                            <button id="btn-next" onclick="typeWriter_pwd()" style="background:none;border: none;display: none;"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right-circle-fill" fill="#ffb533" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-11.5.5a.5.5 0 0 1 0-1h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5z"/>
+                              </svg></button>
+                              <br>
+                            <span id="pwd_label" style="font-weight: bold;margin-top: 60px;font-size: 1.35rem;"></span>
+
+                            <input type="password" name="password_member" id="password_member" placeholder="Your Password" style="margin-bottom: 10px;margin-top:10px;display: none;background: none;border: none;padding: 10px;border-bottom: 4px solid tan;width: 50%;">
+                            <br><br>
+                            <button type="submit" id="btnSubmit_Login" style="width: 60%;background: #ffb533;border: none;"><b>LOGIN</b></button>
+
+
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        
+       
+
+
+        <button onclick="typeWriter()" id="btnTest" style="display:none;">Click me</button>
+        <button onclick="typeWriter_pwd()" id="btnTestpwd" style="display:none;">Click me</button>
+
+        
+        
+
+        <script type="text/javascript">
+
+            if(window.innerWidth >= 400)
+                {
+                    var screen = window.innerHeight - 30;
+                    //$('#dash_login').height(window.innerHeight);
+                    document.getElementById('dash_login').style.height = screen + "px";
+                }else
+                {
+                    document.getElementById('dash_login').style.height = "400px";
+
                 }
+            $(document).ready(function(){
+                $('#btnTest').click();
+
+                $("#email_member").keydown(function(event){
+                    if(event.keyCode == 13) {
+                    event.preventDefault();
+                    $('#btnTestpwd').click();
+                    return false;
+                    }
+                });
+
+                
+
+
+                $("form[name='login_member']").on("submit", function(event){
+                    event.preventDefault();
+                    verify_user();
+
+                });
+
             });
+
+
+            var i = 0;
+            var w = 0;
+            var txt = 'Your Credential Email Address is ';
+            var wlc = 'And else, What is your password ?';
+            var speed = 50;
+            
+           // $('#btnTest').click();
+    
+            function typeWriter() {
+                
+                if (i < txt.length) {
+                    
+                    document.getElementById("demo").innerHTML += txt.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, speed);
+                }
+
+                fade_in_email();
+
+            }
+
+            function fade_in_email()
+            {
+                $("#email_member").delay(2400).fadeIn(1000);
+                $("#btn-next").delay(2400).fadeIn(1000);
+                
+
+            }
+
+            function fade_in_password()
+            {
+                $("#password_member").delay(2400).fadeIn(1000);
+                $("#btn-next").delay(2400).fadeOut(1000);
+
+            }
+
+            function typeWriter_pwd() {
+                
+                if (w < txt.length) {
+                    
+                    document.getElementById("pwd_label").innerHTML += wlc.charAt(w);
+                    w++;
+                    setTimeout(typeWriter_pwd, speed);
+                }
+
+                fade_in_password();
+            }
+
+            function verify_user()
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+                var base_url = origin_path + '/Controllers/index.php?action=login_members';
+
+                var formValues = $(this).serialize();
+
+                $.ajax({
+                    type: "POST",
+                    url: origin_path + '/Controllers/index.php?action=login_members',
+                    data: { email_members: $('#email_member').val(), 
+                            password_members: $('#password_member').val()
+                            },
+                    dataType: 'JSON',
+                    success: function(datas) {
+
+                                        // Run the code here that needs
+                                        //    to access the data returned
+                                        //$('#test').html(data);
+                                        alert(datas.Response);
+                                        switch(datas.Response)
+                                        {
+                                            case "Empty Email":
+                                                alert(datas.Response);
+                                            break;
+                                            case "Empty password":
+                                            break;
+                                            case "Failed to Fetch Token. Login Failed":
+                                            break;
+                                            default:
+                                              window.location.href = origin_path+"/Views/member/home.html";
+                                            break;
+
+                                        }
+                                        //var decode_rec = JSON.parse(datas);
+                                        //$("#test").html(decode_rec.husband);
+                    },
+                    error: function(xhr, ajaxOptions, error) {
+                        alert(xhr.statusText);
+                    }
+                });
+
+            }
+
+            
         </script>
         
 

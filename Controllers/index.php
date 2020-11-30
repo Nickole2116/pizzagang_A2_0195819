@@ -1271,6 +1271,166 @@ class Controller{
 
     }
 
+    public function view_orders_details()
+    {
+        //get GET variables 
+        $ref_id = $_GET['id'];
+
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $my_functions = new My_functions();
+        $session_loads = new Session();
+        $cur_time = $my_functions->now();
+        $session = Session::get_session_id();
+        $roles = Session::userdata("role");
+        $visits = Session::userdata("visit");
+        $en_token = Session::userdata("token");
+        $en_session = $my_functions->md5_generator($session);
+
+        if(empty($ref_id))
+        {
+            $return = array("response"=>"Record Not Found");
+            
+        }else 
+        {
+            //get variable existed 
+            //check 
+            $return = $db_query->get_order_details_by_ref($ref_id);
+            $p_array = explode(",",$return[0]['order_packages']);
+            $count_array = array_count_values($p_array);
+            //print_r($count_array);
+            //print_r($return);
+            $each_productsc = array();
+            $format = array();
+
+            foreach($count_array as $count => $value)
+            {
+
+                //echo $count;
+                array_push($each_productsc,$count);
+                
+
+            }
+            //print_r($each_productsc);
+            $emplode = implode(',',$each_productsc);
+
+            $product_details = $db_query->get_listings_by_array($emplode);
+            //echo print_r($product_details);
+
+            foreach($count_array as $count => $value)
+            {
+                foreach($product_details as $row => $element )
+                {
+                    //echo $element['product_id'];
+                    if($count == $element['product_id'])
+                    {
+                        $merge = array("product_id"=>$element['product_id'],
+                                        "product_attachs"=>$element['product_attachs'],
+                                        "product_name"=>$element['product_name'],
+                                        "product_description"=>$element['product_description'],
+                                        "product_price"=>$element['product_price'],
+                                        "category_name"=>$element['category_name'],
+                                        "quality"=>$value
+
+                        );
+                        array_push($format,$merge);
+                    }
+                }
+            }
+
+            $count_array = count($format);
+
+            
+
+
+            echo '<!DOCTYPE html>
+            <html>
+                <head>
+                    <title>Orders | MEMBER PANEL</title>
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                    <link rel="preconnect" href="https://fonts.gstatic.com"> 
+                    <link href="https://fonts.googleapis.com/css2?family=Alatsi&family=Caveat:wght@700&display=swap" rel="stylesheet">
+                    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
+                    <link rel="stylesheet" href="http://localhost/Assignment2_pizzagang/inc/css/bootstrap.min.css">
+                    <script src="http://localhost/Assignment2_pizzagang/inc/js/bootstrap.min.js" ></script>
+                    <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                </head>
+                <body>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-lg-12 bg-dark" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                                <div style="text-align: center;padding: 15px;color:whitesmoke;font-weight: bolder;">
+                                    <div style="float: left;">
+                                        <a href="../"><button style="background:none;border: none;margin-top: 5px;"><svg width="30px" height="30px" viewBox="0 0 20 20" class="bi bi-arrow-left" fill="white" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                                      </svg></button></a>
+                                    </div>
+                                    <h3>My Orders</h3>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-lg-3" ></div>
+                            <div class="col-12 col-sm-12 col-lg-6" >
+                                <div style="text-align: center;padding: 15px;color:black;font-weight: bolder;">
+                                    
+                                    <br>
+                                     <div style="border-radius:15px;background:white;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);padding:5px">
+                                     <h5>'.$return[0]['tracking_number'].'<h5>
+                                     <div style="border-radius:15px;background: gold;padding: 10px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15), 0 6px 20px 0 rgba(231, 231, 231, 0.14);">'.
+                                        '<span><svg width="1em" height="1em" viewBox="0 0 18 18" class="bi bi-person-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">'.
+                                        '<path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z"/>'.
+                                        '<path fill-rule="evenodd" d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path fill-rule="evenodd" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"/>'.
+                                        '</svg> &nbsp;'.$return[0]['delivery_name'].'</span><br><br><span style="padding-left: 10px;padding-right: 10px;font-size: 9px;">'.$return[0]['address'].'</span>'.
+                                        '<br><br><small>'.$return[0]['email_address'].' | '.$return[0]['phone_number'].'</small><br><br><h2>'.$return[0]['status'].' </h2><br>
+
+                                     </div>
+                                     ';
+                                     echo '
+                                    
+                                </div>
+                                <br>
+                                <h4>Total Amount</h4>
+                                <span>RM '.$return[0]['amounts'].'</span>
+                                <br><br>
+                                <h4>Services Tax</h4>
+                                <span>RM '.$return[0]['taxs'].'</span>
+                                <br><br>
+                                <div style="width:100%;height:2px;background:gold;"></div>
+                                
+                                <div class="container">
+                                    <div class="row">
+                                    ';
+                                    for($i = 0 ; $i < $count_array; $i++)
+                                    {
+                                        echo '<div class="col-12 col-lg-3 col-xs-3 col-sm-4" style="padding:5px;">'.
+                                                '<br><img src="http://localhost/Assignment2_pizzagang/Controllers/upload/'.$format[$i]['product_attachs'].'" width="100%" style="border-radius: 15px;">
+                                                </div>
+                                                <div class="col-12 col-lg-9 col-xs-9 col-sm-8">
+                                                <br><br>
+                                                <h5>'.$format[$i]['product_name'].' x '.$format[$i]['quality'].'</h5></div>';
+                                    }
+                                    
+                                    '
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    </body>
+                    </html>
+
+            ';
+
+        }
+
+        
+
+
+    }
+
     function upload_file()
     {
         if (($_FILES['my_file']['name']!="")){

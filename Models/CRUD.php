@@ -653,6 +653,7 @@
 
         }
 
+
         public function view_my_cart($acc_no_encry)
         {
             //get package lists
@@ -733,6 +734,23 @@
             }
 
             
+
+        }
+
+        public function get_listings_by_array($list)
+        {
+            //$exploded_productid = implode(",",$product_ids_each);
+            $url = urlencode($list);
+            $chg = str_replace('%2C','%27%2C%27',$url); //change , symbol to ','
+            $re_url =  urldecode($chg);
+
+            $data = $this->conn->prepare("SELECT product.product_id , product.product_attachs, product.product_name , product.product_description , product.product_price , product_category.category_name FROM `product_category` JOIN product ON product_category.category_id = product.category_id WHERE product.product_id IN ( '$re_url' ) ");
+            //$data->bindParam(":types",$re_wish);
+            
+            $data->execute();
+            $res = $data->fetchAll();
+
+            return $res;
 
         }
 
@@ -887,10 +905,6 @@
 
         }
 
-        private function create_order_trx_visitor()
-        {
-
-        }
 
         public function order_submit_member($name, $email, $phone, $address, $total, $taxs, $desc,$en_acc_no)
         {
@@ -963,6 +977,16 @@
     
             }
     
+
+        }
+
+        public function get_order_details_by_ref($ref)
+        {
+            $data = $this->conn->prepare("SELECT * FROM orders JOIN orders_trx ON orders.order_id = orders_trx.order_id WHERE orders.ref_id = :ref ");
+            $data->bindParam(':ref', $ref);
+            $data->execute();
+            $res = $data->fetchAll();
+            return $res;
 
         }
 

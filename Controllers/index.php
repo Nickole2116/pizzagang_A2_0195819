@@ -1546,15 +1546,17 @@ class Controller{
 
     function upload_file()
     {
+        
         if (($_FILES['my_file']['name']!="")){
             // Where the file is going to be stored
              $target_dir = "./upload/";
              $file = $_FILES['my_file']['name'];
              $path = pathinfo($file);
-             $filename = $path['filename']."_"."LOAD";
+             $filename = $path['filename'];
              $ext = $path['extension'];
              $temp_name = $_FILES['my_file']['tmp_name'];
              $path_filename_ext = $target_dir.$filename.".".$ext;
+             $filename_ext = $filename.".".$ext;
              
             // Check if file already exists
             if (file_exists($path_filename_ext)) {
@@ -1562,10 +1564,279 @@ class Controller{
             }else{
              move_uploaded_file($temp_name,$path_filename_ext);
              echo "Congratulations! File Uploaded Successfully.";
-             echo $path_filename_ext;
+             echo $filename_ext;
+
+                //do insert here 
+                $return = $db_query->insert_new_product($product_name,$product_desc,$product_type,$product_price,$product_catid,$filename_ext);
+                if($return == "Product Added")
+                {
+                    $res = array("response"=>$return);
+
+                }else{
+                    $res = array("response"=>"failed");
+
+
+                }
+
             }
+        }else
+        {
+            echo "image uploaded fail";
         }
     }
+
+    public function insert_product()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $my_functions = new My_functions();
+        $session_loads = new Session();
+        $cur_time = $my_functions->now();
+        $session = Session::get_session_id();
+        $roles = Session::userdata("role");
+        $visits = Session::userdata("visit");
+        $en_token = Session::userdata("token");
+        $en_session = $my_functions->md5_generator($session);
+        $token = " ";
+
+        $product_name = $_POST['product_name'];
+        $product_desc = $_POST['product_desc'];
+        $product_type = $_POST['product_type'];
+        $product_price = $_POST['product_price'];
+        $product_catid = $_POST['product_catid'];
+
+
+        if (($_FILES['my_file']['name']!="")){
+            // Where the file is going to be stored
+             $target_dir = "./upload/";
+             $file = $_FILES['my_file']['name'];
+             $path = pathinfo($file);
+             $filename = $path['filename'];
+             $ext = $path['extension'];
+             $temp_name = $_FILES['my_file']['tmp_name'];
+             $path_filename_ext = $target_dir.$filename.".".$ext;
+             $filename_ext = $filename.".".$ext;
+             
+            // Check if file already exists
+            if (file_exists($path_filename_ext)) {
+             echo "Sorry, file already exists.";
+            
+             
+            }else{
+             move_uploaded_file($temp_name,$path_filename_ext);
+             echo "Congratulations! File Uploaded Successfully.";
+             echo $filename_ext;
+
+             //doing insert here
+                $return = $db_query->insert_new_product($product_name,$product_desc,$product_type,$product_price,$product_catid,$filename_ext);
+                if($return == "Product Added")
+                {
+                    $res = array("response"=>$return);
+
+                }else{
+                    $res = array("response"=>"failed");
+
+
+                }
+                echo $_SERVER['SERVER_NAME'];
+                $path = explode('/',$_SERVER['PHP_SELF']);
+                echo $path[1];
+                $full_path = $_SERVER['SERVER_NAME']."/".$path[1]."/";
+                header('Location: http://'.$full_path.'Views/admin/product.html');
+
+
+            }
+        }else
+        {
+            echo "Image Empty";
+        }
+
+    }
+
+    public function get_all_products_by_id()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $id = $_POST['pids'];
+
+        $data = $db_query->fetch_product_by_id($id);
+
+        echo json_encode($data);
+
+
+    }
+
+    public function get_all_promotion_by_id()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $id = $_POST['pids'];
+
+        $data = $db_query->fetch_promotion_by_id($id);
+
+        echo json_encode($data);
+
+
+    }
+
+    public function update_product()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $id = $_POST['pids'];
+        $new_name = $_POST['name'];
+        $new_desc = $_POST['desc'];
+        $new_prices = $_POST['price'];
+
+
+        $data = $db_query->update_product($new_name, $new_desc, $new_prices, $id);
+
+        $return = array("response"=>$data);
+        echo json_encode($return);
+
+    } 
+
+    public function insert_promotion()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+
+        //get post var
+        $p_name = $_POST['promo_name'];
+        $p_desc = $_POST['promo_desc'];
+        $p_start = $_POST['promo_start'];
+        $p_end = $_POST['promo_end'];
+        $promo_unique_code = $_POST['promo_code'];
+        $rateid = $_POST['rate_id'];
+        $require_role = $_POST['require_role'];
+        $data = $db_query->insert_promotion($p_name,$p_start,$p_end,$promo_unique_code,$p_desc,$rateid,$require_role);
+
+        $return = array("response"=>$data);
+
+        //echo json_encode($return);
+
+        echo $_SERVER['SERVER_NAME'];
+                $path = explode('/',$_SERVER['PHP_SELF']);
+                echo $path[1];
+                $full_path = $_SERVER['SERVER_NAME']."/".$path[1]."/";
+                header('Location: http://'.$full_path.'Views/admin/promotion.html');
+     
+    }
+
+    public function get_all_promotion_admin()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $data = $db_query->get_all_promotion();
+
+        if(!empty($data))
+        {
+            echo json_encode($data);
+        }else
+        {
+
+            $my_functions = new My_functions();
+
+            $data = array("Response"=>"No Result Found",
+                          "Path"=>__FUNCTION__,
+                          "Actioned"=>$my_functions->now());
+            echo json_encode($data);
+
+        }
+    }
+
+    public function update_promotion()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $id = $_POST['pids'];
+        $new_name = $_POST['name'];
+        $new_desc = $_POST['desc'];
+        $new_codes = $_POST['codes'];
+
+
+        $data = $db_query->update_promotion($new_name, $new_desc, $new_codes, $id);
+
+        $return = array("response"=>$data);
+        echo json_encode($return);
+
+
+        
+    } 
+    public function get_all_orders()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $data = $db_query->get_all_orders();
+
+        if(!empty($data))
+        {
+            echo json_encode($data);
+        }else
+        {
+
+            $my_functions = new My_functions();
+
+            $data = array("Response"=>"No Result Found",
+                          "Path"=>__FUNCTION__,
+                          "Actioned"=>$my_functions->now());
+            echo json_encode($data);
+
+        }
+            
+    }
+
+    public function fetch_orders_by_id()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $id = $_POST['pids'];
+
+        $data = $db_query->get_order_by_id($id);
+
+        echo json_encode($data);
+
+    }
+
+    public function update_order_name()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $id = $_POST['pids'];
+        $new_name = $_POST['name'];
+        $new_desc = $_POST['desc'];
+        $new_phone = $_POST['phone'];
+        $new_address = $_POST['address'];
+
+
+
+        $data = $db_query->update_orders($new_name, $new_phone, $new_address, $new_desc, $id);
+
+        $return = array("response"=>$data);
+        echo json_encode($return);
+
+
+        
+    }
+
+    public function change_status()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $id = $_POST['pids'];
+        $new_status = $_POST['new_status'];
+        
+
+
+
+        $data = $db_query->change_status_order($new_status, $id);
+
+        $return = array("response"=>$data);
+        echo json_encode($return);
+
+    }
+
+    
     
 
     

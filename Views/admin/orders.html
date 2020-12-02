@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dashboard | Admin Panel</title>
+        <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="http://localhost/Assignment2_pizzagang/inc/js/bootstrap.min.js"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com"> 
+        <link href="https://fonts.googleapis.com/css2?family=Alatsi&family=Caveat:wght@700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="http://localhost/Assignment2_pizzagang/inc/css/bootstrap.min.css" >
+        <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
+        
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-lg-12 col-xs-12 bg-dark" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                    
+                    <!--open div again-->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-3 col-sm-3 col-3">
+                                <a href="./dashboard.html"><div style="text-align: center;margin-bottom: 18px;margin-top: 10px;color: white;">
+                                    <img src="http://localhost/Assignment2_pizzagang/inc/images/white-star.png" width="40px" style="margin-bottom: 5px;">
+                                    <br><small>Home</small> 
+                                </div></a>
+                            </div>
+                            <div class="col-lg-3 col-xs-3 col-sm-3 col-3">
+                                <a href="./product.html"><div style="text-align: center;margin-bottom: 18px;margin-top: 10px;color: white;">
+                                    <img src="http://localhost/Assignment2_pizzagang/inc/images/white_products.png" width="40px" style="margin-bottom: 5px;">
+                                    <br><small>Product</small> 
+                                </div></a>
+                            </div>
+                            <div class="col-lg-3 col-xs-3 col-sm-3 col-3">
+                                <a href="./promotion.html"><div style="text-align: center;margin-bottom: 18px;margin-top: 10px;color: white;">
+                                    <img src="http://localhost/Assignment2_pizzagang/inc/images/white_tag.png" width="40px" style="margin-bottom: 5px;">
+                                    <br><small>Promotion</small> 
+                                </div></a>
+                            </div>
+                            <div class="col-lg-3 col-xs-3 col-sm-3 col-3">
+                                <a href="./orders.html"><div style="text-align: center;margin-bottom: 18px;margin-top: 10px;color: white;">
+                                    <img src="http://localhost/Assignment2_pizzagang/inc/images/white_doc.png" width="35px" style="margin-bottom: 5px;">
+                                    <br><b><span>Orders</span></b> 
+
+                                </div></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--end div -->
+
+                </div>
+            </div>
+        </div>
+        <div id="upt_product" style="display: none;">
+            <br><br>
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-lg-12 col-sm-12">
+                        <form>
+                            <div class="form-group">
+                              <label for="productnameupt">Customer Name </label>
+                              <input type="text" class="form-control" name="order_name" id="order_name" placeholder="e.g Aloha Pizza" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productpriceupt">Customer Phone Number </label>
+                                <input type="text" class="form-control" name="order_phone" id="order_phone" placeholder="14.99" required>
+                              </div>
+                              <div class="form-group">
+                                <label for="productpriceupt">Customer Address </label>
+                                <input type="text" class="form-control" name="order_address" id="order_address" placeholder="14.99" required>
+                              </div>
+                            
+                            <div class="form-group">
+                              <label for="productdescupt">Customer Description</label>
+                              <textarea class="form-control" name="order_desc" id="order_desc" rows="3"></textarea>
+                            </div>
+                            <button onclick="update_order()" class="btn btn-dark">Update</button>
+                            <button onclick="close_upt()" class="btn btn-light" style="border: 1px solid grey;">Close</button>
+
+                          </form>
+                          <br><div id="selected_pid"></div><br><br>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <br><br>
+        <div class="container">
+            
+            <div class="row">
+                <div class="col-12 col-lg-12 col-xs-12 col-sm-12">
+                    <div style="overflow-x:auto;">
+                        <table id="view_product">
+                          <tr>
+                            <th>Track No.</th>
+                            <th>Status</th>
+                            <th>Cust. Name</th>
+                            <th>Phone Number</th>
+                            <th>Address</th>
+                            <th>Amount Spend</th>
+                            <th>Descriptions</th>
+                            
+                          </tr>
+                                                    
+                        </table>
+                      
+                      
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <script>
+            $(document).ready(function(){
+                load_order();
+            });
+
+            function load_order()
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                var base_url = origin_path + '/Controllers/index.php?action=get_all_orders';
+                
+                $.ajax({
+                    type: "GET",
+                    url: base_url,
+                    dataType: 'JSON',
+                    success: function(datas) {
+
+                        if(datas.Response == "No Result Found")
+                        {
+                            $('#view_product').append('<span>'+datas.Response+'</span>');
+
+                        }else
+                        {
+                            for(var i=0;i<datas.length;i++)
+                            {
+                                var total = datas[i].amounts + datas[i].taxs;
+                                var format_price = parseFloat(total).toFixed(2);
+                                var status_no = datas[i].status;
+                                var status_word = "";
+                                var next_word = "";
+                                var type_but = "";
+                                switch(status_no)
+                                {
+                                    case "1":
+                                    status_word = "Received";
+                                    next_word = "Set Prepare";
+                                    type_but = "";
+                                    break;
+                                    case "2":
+                                    status_word = "Preparing";
+                                    next_word = "Set Delivery";
+                                    type_but = "background:#6b679c;";
+                                    break;
+                                    case "3":
+                                    status_word = "Delivering";
+                                    next_word = "Complete";
+                                    type_but = "background:#3f838b;";
+                                    break;
+                                    case "4":
+                                    status_word = "Done";
+                                    next_word = "";
+                                    type_but = "display:none";
+                                    break;
+                                    default:
+                                    status_word = "Expired";
+                                    next_word = "";
+                                    type_but = "display:none";
+                                    break;
+                                }
+
+                                //$('#pizza_list').append(datas[i].product_name + datas[i].product_description);
+                                $('#view_product').append('<tr>'+
+                                                    '<td>'+datas[i].tracking_number+'</td>'+
+                                                    '<td>'+status_word+'</td>'+
+                                                    '<td>'+datas[i].delivery_name+'</td>'+
+                                                    '<td>'+datas[i].phone_number+'</td>'+
+                                                    '<td><small>'+datas[i].address+'</small></td>'+
+                                                    '<td> RM '+format_price+'</td>'+
+                                                    '<td><small>'+datas[i].descriptions+'</small></td>'+
+                                                    '<td><button onclick="delete_order('+datas[i].order_id+')" type="button" class="btn btn-danger">Delete</button> <button onclick="open_upt('+datas[i].order_id+')" type="button" class="btn btn-warning">Update</button> <button style="'+type_but+'" onclick="change_status('+datas[i].status+','+datas[i].orders_trx_id+')" type="button" class="btn btn-dark">'+next_word+'</button></td><tr>');
+
+                            }
+
+                        }
+                        
+                        
+                    },
+                    error: function() {
+                        //alert('Error occured');
+                    }
+                });
+
+
+            }
+
+            function delete_order(pid)
+            {
+                alert(pid);
+
+            }
+
+            function update_order(product_id)
+            {
+                    var projectname = window.location.pathname;
+                    var slice_projname = projectname.split("/");
+                    var origin_path = window.location.origin + "/" + slice_projname[1];
+                    var base_url = origin_path + '/Controllers/index.php?action=update_order_name';
+
+                    var namess = $('#order_name').val();
+                    var phones = $('#order_phone').val();
+                    var addresss = $('#order_address').val();
+                    var descs = $('#order_desc').val();
+
+
+
+
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: base_url,
+                        data:{ pids: product_id , name: namess , desc: descs, phone: phones, address: addresss},
+                        dataType: 'JSON',
+                        success: function(datas) {
+
+                            load_order();
+                            
+                        },
+                        error: function() {
+                            //alert('Error occured');
+                        }
+                    });
+               
+
+
+            }
+
+            function open_upt(val)
+            {
+                document.getElementById('upt_product').style.display = "block";
+                load_selected_data(val);
+
+
+            }
+
+            function load_selected_data(orderid)
+            {
+                var projectname = window.location.pathname;
+                    var slice_projname = projectname.split("/");
+                    var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                    var base_url = origin_path + '/Controllers/index.php?action=fetch_orders_by_id';
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: base_url,
+                        data:{ pids: orderid},
+                        dataType: 'JSON',
+                        success: function(datas) {
+                            alert(datas.descriptions);
+
+                            $('#upt_product').html('<br><br><div class="container"><div class="row"><div class="col-12 col-xs-12 col-lg-12 col-sm-12">'+
+                            '<form><div class="form-group"><label for="productnameupt">Customer Name </label><input type="text" class="form-control" value="'+datas.delivery_name+'" name="order_name" id="order_name" placeholder="" required></div>'+
+                            '<div class="form-group"><label for="productpriceupt">Customer Phone Number </label><input type="text" class="form-control" value="'+datas.phone_number+'" name="order_phone"  id="order_phone" placeholder="" required>'+
+                            '</div><div class="form-group"><label for="productpriceupt">Customer Address </label><input type="text" class="form-control" value="'+datas.address+'" name="order_address" id="order_address" placeholder="" required>'+
+                            '</div><div class="form-group"><label for="productdescupt">Customer Description</label><textarea class="form-control" name="order_desc" id="order_desc" rows="3">'+datas.descriptions+'</textarea></div>'+
+                            '<button onclick="update_order('+datas.order_id+')" class="btn btn-dark">Update</button><button onclick="close_upt()" class="btn btn-light" style="border: 1px solid grey;">Close</button></form>'+
+                            '<br><div id="selected_pid">Selected Order : '+datas.tracking_number+'</div><br><br></div></div></div>');
+                            
+                            
+                        },
+                        error: function() {
+                            alert('Error occured');
+                        }
+                    });
+
+
+            }
+
+            function close_upt()
+            {
+                document.getElementById('upt_product').style.display = "none";
+
+
+            }
+
+            function change_status(cur_status, trxid)
+            {
+                var projectname = window.location.pathname;
+                    var slice_projname = projectname.split("/");
+                    var origin_path = window.location.origin + "/" + slice_projname[1];
+                    var base_url = origin_path + '/Controllers/index.php?action=change_status';
+                    var stat_code = 0;
+                    if(cur_status > 4)
+                    {
+                        stat_code = cur_status;
+                    }else
+                    {
+                        stat_code = cur_status + 1;
+                    }
+
+
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: base_url,
+                        data:{ pids: trxid , new_status: stat_code},
+                        dataType: 'JSON',
+                        success: function(datas) {
+                            $('#view_product').html("<tr><th>Track No.</th><th>Status</th><th>Cust. Name</th><th>Phone Number</th><th>Address</th><th>Amount Spend</th><th>Descriptions</th></tr>");
+                            load_order();
+                            
+                        },
+                        error: function() {
+                            alert('Error occured');
+                        }
+                    });
+               
+
+
+            }
+        </script>
+
+    </body>
+</html>

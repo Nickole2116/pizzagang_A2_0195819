@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dashboard | Admin Panel</title>
+        <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="http://localhost/Assignment2_pizzagang/inc/js/bootstrap.min.js"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com"> 
+        <link href="https://fonts.googleapis.com/css2?family=Alatsi&family=Caveat:wght@700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="http://localhost/Assignment2_pizzagang/inc/css/bootstrap.min.css" >
+        <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
+
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-lg-12 col-xs-12 bg-dark" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                    
+                    <!--open div again-->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-3 col-sm-3 col-3">
+                                <a href="./dashboard.html"><div style="text-align: center;margin-bottom: 18px;margin-top: 10px;color: white;">
+                                    <img src="http://localhost/Assignment2_pizzagang/inc/images/white-star.png" width="40px" style="margin-bottom: 5px;">
+                                    <br><small>Home</small> 
+                                </div></a>
+                            </div>
+                            <div class="col-lg-3 col-xs-3 col-sm-3 col-3">
+                                <a href="./product.html"><div style="text-align: center;margin-bottom: 18px;margin-top: 10px;color: white;">
+                                    <img src="http://localhost/Assignment2_pizzagang/inc/images/white_products.png" width="40px" style="margin-bottom: 5px;">
+                                    <br><small>Product</small> 
+                                </div></a>
+                            </div>
+                            <div class="col-lg-3 col-xs-3 col-sm-3 col-3">
+                                <a href="./promotion.html"><div style="text-align: center;margin-bottom: 18px;margin-top: 10px;color: white;">
+                                    <img src="http://localhost/Assignment2_pizzagang/inc/images/white_tag.png" width="40px" style="margin-bottom: 5px;">
+                                    <br><b><span>Promotion</span></b> 
+                                </div></a>
+                            </div>
+                            <div class="col-lg-3 col-xs-3 col-sm-3 col-3">
+                                <a href="./orders.html"><div style="text-align: center;margin-bottom: 18px;margin-top: 10px;color: white;">
+                                    <img src="http://localhost/Assignment2_pizzagang/inc/images/white_doc.png" width="35px" style="margin-bottom: 5px;">
+                                    <br><small>Order</small> 
+
+                                </div></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--end div -->
+
+                </div>
+            </div>
+        </div>
+
+        <br><br>
+        <div style="width: 100%;text-align: center;padding: 10px;" id="slot_add">
+            <button onclick="open_add();" class="btn btn-dark">Add New Products</button>
+            <div style="height: 2px;background-color: rgb(238, 238, 238);margin: 10px 20px;"></div>
+        </div>
+
+        <!--insert-->
+        <div id="add_product" style="display: none;">
+            <br><br>
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-lg-12 col-sm-12">
+                        <form method="post" action="http://localhost/Assignment2_pizzagang/Controllers/index.php?action=insert_promotion" enctype="multipart/form-data">
+                            <div class="form-group">
+                              <label for="productname">Promotion Name </label>
+                              <input type="text" class="form-control" name="promo_name" id="exampleFormControlInput1" placeholder="Double12 Birthday" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productprice">Promotion Unique Code </label>
+                                <input type="text" class="form-control" name="promo_code" id="exampleFormControlInput1" placeholder="SWEET_BIRTHDAY23" required>
+                              </div>
+
+                              <span>Promotion Validity</span>
+                              <div id="date-picker-example" class="md-form md-outline input-with-post-icon">
+                                <input type="text" class="datepicker" name="promo_start" placeholder="Start Date">                           
+                              </div>
+                               &nbsp;Until
+                              <div id="date-picker-example" class="md-form md-outline input-with-post-icon">
+                                <input type="text" class="datepicker" name="promo_end" placeholder="End Date">                     
+                              </div>
+                              <br>
+                            
+                              <div class="form-group">
+                                <label for="sel-rate">Promotion Rate</label>
+                                <select class="form-control" name="rate_id" id="exampleFormControlSelect1">
+                                  <option value="1">RM 5</option>
+                                  <option value="2">RM 10</option>
+                                  <option value="3">RM 15</option>
+                                </select>
+                              </div>
+                              
+                            <div class="form-group">
+                              <label for="sel-require">Limit User Role</label>
+                              <select class="form-control" name="require_role" id="exampleFormControlSelect1">
+                                <option value="">Public</option>
+                                <option value="###MEMBER###">Member</option>
+                              </select>
+                            </div>
+                            
+                            <div class="form-group">
+                              <label for="productdesc">Promotion T&C Description</label>
+                              <textarea class="form-control" name="promo_desc" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            </div>
+                            <input type="submit" class="btn btn-dark">
+                            <button onclick="close_add()" class="btn btn-light" style="border: 1px solid grey;">Close</button>
+
+                          </form>
+                          <br><br><br>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="upt_product" style="display: none;">
+            
+
+        </div>
+       
+
+
+        <div class="container">
+            
+            <div class="row">
+                <div class="col-12 col-lg-12 col-xs-12 col-sm-12">
+                    <div style="overflow-x:auto;">
+                        <table id="view_promo">
+                          <tr>
+                            <th>Promotion Name</th>
+                            <th>Promotion Unique</th>
+                            <th>Start date</th>
+                            <th>Expire Date</th>
+                            <th>Limit User</th>
+                            <th>Rate ID</th>
+                            <th>T&C</th>
+                            
+                          </tr>
+                                                    
+                        </table>
+                      
+                      
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function(){
+                $( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });            
+                load_promotion();
+            });
+
+            function load_promotion()
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                var base_url = origin_path + '/Controllers/index.php?action=get_all_promotion_admin';
+                
+                $.ajax({
+                    type: "GET",
+                    url: base_url,
+                    dataType: 'JSON',
+                    success: function(datas) {
+
+                        if(datas.Response == "No Result Found")
+                        {
+                            $('#view_promo').append('<span>'+datas.Response+'</span>');
+
+                        }else
+                        {
+                            for(var i=0;i<datas.length;i++)
+                            {
+
+                                //$('#pizza_list').append(datas[i].product_name + datas[i].product_description);
+                                $('#view_promo').append('<tr>'+
+                                                    '<td>'+datas[i].promotion_name+'</td>'+
+                                                    '<td>'+datas[i].promo_code+'</td>'+
+                                                    '<td>'+datas[i].promotion_start+'</td>'+
+                                                    '<td>'+datas[i].promotion_end+'</td>'+
+                                                    '<td>'+datas[i].require_roles+'</td>'+
+                                                    '<td>'+datas[i].promotion_rate_id+'</td>'+
+                                                    '<td>'+datas[i].descriptions+'</td>'+
+                                                    '<td><button onclick="delete_promo('+datas[i].promotion_id+')" type="button" class="btn btn-danger">Delete</button> <button onclick="open_upt('+datas[i].promotion_id+')" type="button" class="btn btn-warning">Update</button></td><tr>');
+
+                            }
+
+                        }
+                        
+                        
+                    },
+                    error: function() {
+                        alert('Error occured');
+                    }
+                });
+
+
+            }
+
+            
+
+            function open_add()
+            {
+                document.getElementById('slot_add').style.display = "none";
+                    document.getElementById('add_product').style.display = "block";
+
+            }
+
+            function close_add()
+            {
+                document.getElementById('slot_add').style.display = "block";
+                    document.getElementById('add_product').style.display = "none";
+
+            }
+
+            function open_upt(val)
+            {
+                document.getElementById('upt_product').style.display = "block";
+
+
+                    //append
+                    /*$('#upt_product').html('<div class="container"><div class="row"><div class="col-12 col-xs-12 col-lg-12 col-sm-12"><form>'+
+                    '<div class="form-group"><label for="productnameupt">Promotion Name </label><input type="text" class="form-control" name="promotion_name" id="product_name_upt" placeholder="e.g Aloha Pizza" required>'+
+                    '</div><div class="form-group"><label for="productpriceupt">Promotion Unique Code</label><input type="text" class="form-control" name="promotion_unique" id="product_price_upt" placeholder="14.99" required>'+
+                    '</div><div class="form-group"><label for="productdescupt">Promotion T&C Description</label>'+
+                    '<textarea class="form-control" name="promotion_descriptions" id="product_desc_upt" rows="3"></textarea></div>'+
+                    '<button onclick="update_product()" class="btn btn-dark">Update</button><button onclick="close_upt()" class="btn btn-light" style="border: 1px solid grey;">Close</button></form><br><div id="selected_pid"></div><br><br></div></div></div>');
+*/
+load_selected_data(val);
+
+            }
+
+            function close_upt()
+            {
+                document.getElementById('upt_product').style.display = "none";
+
+
+            }
+
+            function load_selected_data(id)
+                {
+                    var projectname = window.location.pathname;
+                    var slice_projname = projectname.split("/");
+                    var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                    var base_url = origin_path + '/Controllers/index.php?action=get_all_promotion_by_id';
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: base_url,
+                        data:{ pids: id},
+                        dataType: 'JSON',
+                        success: function(datas) {
+                            //alert(datas.promotion_name);
+
+                            $('#upt_product').html('<div class="container"><div class="row"><div class="col-12 col-xs-12 col-lg-12 col-sm-12"><form>'+
+                    '<div class="form-group"><label for="productnameupt">Promotion Name </label><input type="text" class="form-control" value="'+datas.promotion_name+'" name="promotion_name" id="product_name_upt" placeholder="e.g Aloha Pizza" required>'+
+                    '</div><div class="form-group"><label for="productpriceupt">Promotion Unique Code</label><input type="text" class="form-control" name="promotion_unique" value="'+datas.promo_code+'" id="product_price_upt" placeholder="14.99" required>'+
+                    '</div><div class="form-group"><label for="productdescupt">Promotion T&C Description</label>'+
+                    '<textarea class="form-control" name="promotion_descriptions" id="product_desc_upt" rows="3">'+datas.descriptions+'</textarea></div>'+
+                    '<button id="btnUpdate" onclick="update_promotion('+id+')" class="btn btn-dark">Update</button><button onclick="close_upt()" class="btn btn-light" style="border: 1px solid grey;">Close</button></form><br><div id="selected_pid"></div><br><br></div></div></div>');
+
+                            
+                            
+                        },
+                        error: function() {
+                            alert('Error occured');
+                        }
+                    });
+
+                }
+
+                function update_promotion(promo_id)
+                {
+                    
+                    var projectname = window.location.pathname;
+                        var slice_projname = projectname.split("/");
+                        var origin_path = window.location.origin + "/" + slice_projname[1];
+                        var base_url = origin_path + '/Controllers/index.php?action=update_promotion';
+
+                        var namess = $('#product_name_upt').val();
+                        var codess = $('#product_price_upt').val();
+                        var descs = $('#product_desc_upt').val();
+
+                        //alert(descs);
+
+                        
+                        $.ajax({
+                            type: "POST",
+                            url: base_url,
+                            data:{ pids: promo_id , name: namess , desc: descs, codes: codess},
+                            //dataType: 'JSON',
+                            success: function(datas) {
+                                e.preventdefault();
+                                load_promotion();
+                                
+                            },
+                            error: function() {
+                                //alert('Error occured');
+                            }
+                        });
+
+                    
+
+                }
+
+                 
+        </script>
+
+        
+
+    </body>
+</html>

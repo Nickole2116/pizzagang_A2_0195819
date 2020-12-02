@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dashboard | Admin Panel</title>
+        <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="http://localhost/Assignment2_pizzagang/inc/js/bootstrap.min.js"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com"> 
+        <link href="https://fonts.googleapis.com/css2?family=Alatsi&family=Caveat:wght@700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="http://localhost/Assignment2_pizzagang/inc/css/bootstrap.min.css" >
+        <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
+        <style>
+            table {
+              border-collapse: collapse;
+              border-spacing: 0;
+              width: 100%;
+              border: 1px solid #ddd;
+            }
+            
+            th, td {
+              text-align: left;
+              padding: 8px;
+            }
+            </style>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-lg-12 col-xs-12 bg-dark" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                    
+                    <!--open div again-->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-3 col-xs-3 col-sm-3 col-3">
+                                <a href="./dashboard.html"><div style="text-align: center;margin-bottom: 18px;margin-top: 10px;color: white;">
+                                    <img src="http://localhost/Assignment2_pizzagang/inc/images/white-star.png" width="40px" style="margin-bottom: 5px;">
+                                    <br><small>Home</small> 
+                                </div></a>
+                            </div>
+                            <div class="col-lg-3 col-xs-3 col-sm-3 col-3">
+                                <a href="./product.html"><div style="text-align: center;margin-bottom: 18px;margin-top: 10px;color: white;">
+                                    <img src="http://localhost/Assignment2_pizzagang/inc/images/white_products.png" width="40px" style="margin-bottom: 5px;">
+                                    <br><b><span>Product</span></b> 
+                                </div></a>
+                            </div>
+                            <div class="col-lg-3 col-xs-3 col-sm-3 col-3">
+                                <a href="./promotion.html"><div style="text-align: center;margin-bottom: 18px;margin-top: 10px;color: white;">
+                                    <img src="http://localhost/Assignment2_pizzagang/inc/images/white_tag.png" width="40px" style="margin-bottom: 5px;">
+                                    <br><small>Promotion</small> 
+                                </div></a>
+                            </div>
+                            <div class="col-lg-3 col-xs-3 col-sm-3 col-3">
+                                <a href="./orders.html"><div style="text-align: center;margin-bottom: 18px;margin-top: 10px;color: white;">
+                                    <img src="http://localhost/Assignment2_pizzagang/inc/images/white_doc.png" width="35px" style="margin-bottom: 5px;">
+                                    <br><small>Order</small> 
+
+                                </div></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--end div -->
+
+                </div>
+            </div>
+        </div>
+
+        <br><br>
+        <div style="width: 100%;text-align: center;padding: 10px;" id="slot_add">
+            <button onclick="open_slot_add();" class="btn btn-dark">Add New Products</button>
+            <div style="height: 2px;background-color: rgb(238, 238, 238);margin: 10px 20px;"></div>
+        </div>
+
+
+        <div id="add_product" style="display: none;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-lg-12 col-sm-12">
+                        <form method="post" action="http://localhost/Assignment2_pizzagang/Controllers/index.php?action=insert_product" enctype="multipart/form-data">
+                            <div class="form-group">
+                              <label for="productname">Product Name </label>
+                              <input type="text" class="form-control" name="product_name" id="exampleFormControlInput1" placeholder="e.g Aloha Pizza" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productprice">Product Price </label>
+                                <input type="number" class="form-control" name="product_price" id="exampleFormControlInput1" placeholder="14.99" required>
+                              </div>
+                            <div class="form-group">
+                                <label for="productimage">Product Image</label>
+                                <input type="file" class="form-control-file" name="my_file" id="my_file">
+                              </div>
+                              <div class="form-group">
+                                <label for="sel-type">Product Size</label>
+                                <select class="form-control" name="product_type" id="exampleFormControlSelect1">
+                                  <option value="1">Small</option>
+                                  <option value="2">Medium</option>
+                                  <option value="3">Large</option>
+                                </select>
+                              </div>
+                              
+                            <div class="form-group">
+                              <label for="sel-category">Type of Category</label>
+                              <select class="form-control" name="product_catid" id="exampleFormControlSelect1">
+                                <option value="1">Pizza</option>
+                                <option value="2">Salad</option>
+                                <option value="3">Dessert</option>
+                                <option value="4">Beverage</option>
+                                <option value="5">Sides</option>
+                              </select>
+                            </div>
+                            
+                            <div class="form-group">
+                              <label for="productdesc">Product Description</label>
+                              <textarea class="form-control" name="product_desc" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            </div>
+                            <input type="submit" class="btn btn-dark">
+                            <button onclick="close_slot_add()" class="btn btn-light" style="border: 1px solid grey;">Close</button>
+
+                          </form>
+                          <br><br><br>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="upt_product" style="display: none;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-lg-12 col-sm-12">
+                        <form>
+                            <div class="form-group">
+                              <label for="productnameupt">Product Name </label>
+                              <input type="text" class="form-control" name="product_name_upt" id="product_name_upt" placeholder="e.g Aloha Pizza" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productpriceupt">Product Price </label>
+                                <input type="number" class="form-control" name="product_price_upt" id="product_price_upt" placeholder="14.99" required>
+                              </div>
+                            
+                            <div class="form-group">
+                              <label for="productdescupt">Product Description</label>
+                              <textarea class="form-control" name="product_desc_upt" id="product_desc_upt" rows="3"></textarea>
+                            </div>
+                            <button onclick="update_product()" class="btn btn-dark">Update</button>
+                            <button onclick="close_slot_upt()" class="btn btn-light" style="border: 1px solid grey;">Close</button>
+
+                          </form>
+                          <br><div id="selected_pid"></div><br><br>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+       
+
+       
+
+            <div class="container-fluid">
+                <div class="row"id="view_product">
+                    <br><br>
+                </div>
+            </div>
+
+            <script>
+                $(document).ready(function(){
+
+                    load_products();
+                    //slot_add
+                    //btn
+                    
+
+                });
+
+                function load_products()
+                {
+                    var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                var base_url = origin_path + '/Controllers/index.php?action=get_all_prod';
+                
+                $.ajax({
+                    type: "GET",
+                    url: base_url,
+                    dataType: 'JSON',
+                    success: function(datas) {
+
+                        if(datas.Response == "No Result Found")
+                        {
+                            $('#view_product').append('<span>'+datas.Response+'</span>');
+
+                        }else
+                        {
+                            for(var i=0;i<datas.length;i++)
+                            {
+
+                                //$('#pizza_list').append(datas[i].product_name + datas[i].product_description);
+                                $('#view_product').append('<br><br><div class="col-12 col-lg-6 col-xs-12 col-sm-12"><div style="margin:10px;color: white;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);border-radius: 15px;">'+
+                                '<div class="container-fluid"><div class="row"><div class="col-4 col-xs-4 col-sm-3 col-lg-3 "><div style="text-align: center;padding: 5px;"><img src="http://localhost/Assignment2_pizzagang/Controllers/upload/'+datas[i].product_attachs+'" width="100%" style="margin-bottom: 5px;">'+
+                                '</div></div><div class="col-8 col-xs-8 col-sm-9 col-lg-9 "><h5 style="color: black;margin-top: 5px;">'+datas[i].product_name+'<sup><mark style="background:gold">'+datas[i].category_name+'</mark></sup></h5>'+
+                                '<p style="color: black;font-size: 10px;">'+datas[i].product_description+'</p><span style="color: black;font-weight: bold;">RM '+datas[i].product_price+'</span><div style="padding-top: 10px;padding-bottom: 10px;"><button onclick="delete_product('+datas[i].product_id+')" class="btn btn-danger">delete</button> &nbsp;<button onclick="open_slot_upt('+datas[i].product_id+')" class="btn btn-warning">Update Details</button></div>'+
+                                '</div></div></div></div></div><br>');
+
+                            }
+
+                        }
+                        
+                        
+                    },
+                    error: function() {
+                        //alert('Error occured');
+                    }
+                });
+
+                }
+
+                function open_slot_add()
+                {
+                    document.getElementById('slot_add').style.display = "none";
+                    document.getElementById('add_product').style.display = "block";
+
+                }
+
+                function close_slot_add()
+                {
+                    document.getElementById('slot_add').style.display = "block";
+                    document.getElementById('add_product').style.display = "none";
+
+                }
+
+                function open_slot_upt(val)
+                {
+                    document.getElementById('upt_product').style.display = "block";
+
+
+                    //append
+                    $('#upt_product').html('<div class="container"><div class="row"><div class="col-12 col-xs-12 col-lg-12 col-sm-12">'+
+                    '<form><div class="form-group"><label for="productnameupt">Product Name </label><input type="text" class="form-control" name="product_name_upt" id="product_name_upt" placeholder="e.g Aloha Pizza" required>'+
+                    '</div><div class="form-group"><label for="productpriceupt">Product Price </label><input type="number" class="form-control" name="product_price_upt" id="product_price_upt" placeholder="14.99" required></div>'+
+                    '<div class="form-group"><label for="productdescupt">Product Description</label><textarea class="form-control" name="product_desc_upt" id="product_desc_upt" rows="3"></textarea></div>'+
+                    '<button onclick="update_product('+val+')" class="btn btn-dark">Update</button><button onclick="close_slot_upt()" class="btn btn-light" style="border: 1px solid grey;">Close</button></form>'+
+                    '<br><div id="selected_pid"></div><br><br></div></div></div>');
+
+                    load_selected_data(val);
+
+                }
+
+                function close_slot_upt()
+                {
+                    document.getElementById('upt_product').style.display = "none";
+
+
+                }
+
+                function load_selected_data(id)
+                {
+                    var projectname = window.location.pathname;
+                    var slice_projname = projectname.split("/");
+                    var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                    var base_url = origin_path + '/Controllers/index.php?action=get_all_products_by_id';
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: base_url,
+                        data:{ pids: id},
+                        dataType: 'JSON',
+                        success: function(datas) {
+
+                            $('#upt_product').html('<div class="container"><div class="row"><div class="col-12 col-xs-12 col-lg-12 col-sm-12">'+
+                                '<form><div class="form-group"><label for="productnameupt">Product Name </label><input type="text" value="'+datas.product_name+'" class="form-control" name="product_name_upt" id="product_name_upt" placeholder="e.g Aloha Pizza" required>'+
+                                '</div><div class="form-group"><label for="productpriceupt">Product Price </label><input type="number" class="form-control" name="product_price_upt" id="product_price_upt" placeholder="14.99" value="'+datas.product_price+'" required></div>'+
+                                '<div class="form-group"><label for="productdescupt">Product Description</label><textarea class="form-control" name="product_desc_upt" id="product_desc_upt" rows="3"></textarea></div>'+
+                                '<button onclick="update_product('+datas.product_id+')" class="btn btn-dark">Update</button><button onclick="close_slot_upt()" class="btn btn-light" style="border: 1px solid grey;">Close</button></form>'+
+                                '<br><div id="selected_pid">Selected Object : ' + datas.product_name+'</div><br><br></div></div></div>');
+                            
+                            
+                        },
+                        error: function() {
+                            alert('Error occured3');
+                        }
+                    });
+
+                }
+
+                function update_product(product_id)
+                {
+                    var projectname = window.location.pathname;
+                    var slice_projname = projectname.split("/");
+                    var origin_path = window.location.origin + "/" + slice_projname[1];
+                    var base_url = origin_path + '/Controllers/index.php?action=update_product';
+
+                    var namess = $('#product_name_upt').val();
+                    var prices = $('#product_price_upt').val();
+                    var descs = $('#product_desc_upt').val();
+
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: base_url,
+                        data:{ pids: product_id , name: namess , desc: descs, price: prices},
+                        dataType: 'JSON',
+                        success: function(datas) {
+
+                            load_products();
+                            
+                        },
+                        error: function() {
+                            //alert('Error occured');
+                        }
+                    });
+
+                }
+                
+            </script>
+        
+
+        
+
+    </body>
+</html>

@@ -1162,6 +1162,321 @@
 
     }
 
+    /**
+     * -----------------------------
+     * Administrator Control
+     * -----------------------------
+     */
+
+     public function get_all_spec_products()
+     {
+         /*
+            GET ALL TYPE LISTINGS
+            */
+            $data = $this->conn->prepare("SELECT product.product_id , product.product_name , product.product_description , product.product_attachs,  product.product_price , product_category.category_name FROM `product_category` JOIN product ON product_category.category_id = product.category_id ");            
+            $data->execute();
+            $res = $data->fetchAll();
+            if(empty($res))
+            {
+                return null;
+            }else{
+                //$ress = array("Products"=>$res);
+                //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+                
+                return $res;
+
+            }
+
+     }
+
+     public function get_all_orders()
+     {
+        $data = $this->conn->prepare("SELECT * FROM orders JOIN orders_trx ON orders.order_id = orders_trx.order_id ; ");
+        $data->execute();
+        $res = $data->fetchAll();
+
+        if(empty($res))
+        {
+            return null;
+        }else{
+            //$ress = array("Products"=>$res);
+            //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+            
+            return $res;
+
+        }
+
+     }
+
+     public function get_promo_used()
+     {
+        $data = $this->conn->prepare("SELECT * FROM `promotion_log` JOIN promotion ON promotion_log.promotion_code = promotion.promo_code JOIN orders ON promotion_log.order_id = orders.order_id ;");
+        $data->execute();
+        $res = $data->fetchAll();
+
+        if(empty($res))
+        {
+            return null;
+        }else{
+            //$ress = array("Products"=>$res);
+            //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+            
+            return $res;
+
+        }
+
+
+     }
+
+     public function get_all_promotion()
+     {
+         //SELECT * FROM `promotion` JOIN promotion_rate ON promotion.promotion_rate_id = promotion_rate.promo_rate_id
+         $data = $this->conn->prepare("SELECT * FROM `promotion` JOIN promotion_rate ON promotion.promotion_rate_id = promotion_rate.promo_rate_id ; ");
+         $data->execute();
+         $res = $data->fetchAll();
+ 
+         if(empty($res))
+         {
+             return null;
+         }else{
+            
+             return $res;
+ 
+         }
+
+     }
+
+     public function get_all_promotion_member_limit()
+     {
+
+     }
+
+     public function get_all_promotion_public()
+     {
+
+     }
+
+     public function insert_promotion($name,$start,$end,$code,$desc,$rateid,$require_role)
+     {
+        try{
+            $com = $this->conn->prepare('INSERT INTO promotion VALUES(NULL , :n, :startd , :endd , :code , null , null , :qp , :descs, :rateid );');
+            $com->bindParam(':n',$name);
+            $com->bindParam(':startd',$start);
+            $com->bindParam(':endd',$end);
+            $com->bindParam(':code',$code);
+            //$com->bindParam(':a',$attach);
+            //$com->bindParam(':qr',NULL);
+            $com->bindParam(':qp',$require_role);
+            $com->bindParam(':descs',$desc);
+            $com->bindParam(':rateid',$rateid);
+
+            $com->execute();
+
+            return "Promotion Added";
+
+        }catch(Exception $e)
+        {
+            return $e->getMessage();
+
+        }
+
+     }
+
+     public function insert_new_product($name,$desc,$type,$price,$catid,$attchs)
+     {
+        $status = 1;
+        try{
+            $com = $this->conn->prepare('INSERT INTO product VALUES(NULL , :n, :att , :de , :t , :pri , :cat , :ss );');
+            $com->bindParam(':n',$name);
+            $com->bindParam(':att',$attchs);
+            $com->bindParam(':de',$desc);
+            $com->bindParam(':t',$type);
+            $com->bindParam(':pri',$price);
+            $com->bindParam(':cat',$catid);
+            $com->bindParam(':ss',$status);
+
+            
+
+            $com->execute();
+
+            return "Product Added";
+
+        }catch(Exception $e)
+        {
+            return $e->getMessage();
+
+        }
+
+
+     }
+
+     public function change_status_order($status, $order_id)
+     {
+            try{
+                $data = $this->conn->prepare("UPDATE `orders_trx` SET `status` = :status_code WHERE `orders_trx_id` = :oids ; ");
+                $data->bindParam(':status_code', $status);
+                $data->bindParam(':oids', $order_id);
+                $data->execute();
+
+                return "Status Updated";
+
+            }catch(Exception $e)
+            {
+                $data->rollback();
+                return "Commit Failed : " . $e->getMessage();
+
+            }
+
+     }
+
+     public function update_product($name, $descs, $prices, $pid)
+     {
+        try{
+            
+            $data = $this->conn->prepare("UPDATE product SET product_name = :names , product_description = :descs , product_price = :prices  WHERE product_id = :pid ;");
+            $data->bindParam(':names', $name);
+            $data->bindParam(':descs', $descs);
+            $data->bindParam(':prices', $prices);
+            $data->bindParam(':pid', $pid);
+
+            
+
+            $data->execute();
+
+
+            return "Detail Updated";
+
+        }catch(Exception $e)
+        {
+            //echo "Commit Failed : " . $e->getMessage();
+            return $e->getMessage();
+
+
+        }
+     }
+
+     public function fetch_product_by_id($types)
+     {
+        $data = $this->conn->prepare("SELECT * FROM product WHERE product_id = :types ");
+        $data->bindParam(":types",$types);
+        
+        $data->execute();
+        $res = $data->fetch();
+        if(empty($res))
+        {
+            return null;
+        }else{
+            //$ress = array("Products"=>$res);
+            //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+            
+            return $res;
+
+        }
+
+     }
+
+     public function fetch_promotion_by_id($types)
+     {
+        $data = $this->conn->prepare("SELECT * FROM promotion WHERE promotion_id = :types ");
+        $data->bindParam(":types",$types);
+        
+        $data->execute();
+        $res = $data->fetch();
+        if(empty($res))
+        {
+            return null;
+        }else{
+            //$ress = array("Products"=>$res);
+            //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+            
+            return $res;
+
+        }
+
+     }
+
+     public function update_promotion($name, $descs, $codes, $pid)
+     {
+        try{
+            
+            $data = $this->conn->prepare("UPDATE promotion SET promotion_name = :names , promo_code = :codes , descriptions = :descs  WHERE promotion_id = :pid ;");
+            $data->bindParam(':names', $name);
+            $data->bindParam(':codes', $codes);
+            $data->bindParam(':descs', $descs);
+            $data->bindParam(':pid', $pid);
+
+            
+
+            $data->execute();
+
+
+            return "Detail Updated";
+
+        }catch(Exception $e)
+        {
+            //echo "Commit Failed : " . $e->getMessage();
+            return $e->getMessage();
+
+
+        }
+
+        
+     }
+
+    public function get_order_by_id($oids)
+    {
+        $data = $this->conn->prepare("SELECT * FROM orders JOIN orders_trx ON orders.order_id = orders_trx.order_id WHERE orders.order_id = :types ;");
+        $data->bindParam(":types",$oids);
+        
+        $data->execute();
+        $res = $data->fetch();
+        if(empty($res))
+        {
+            return null;
+        }else{
+            //$ress = array("Products"=>$res);
+            //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+            
+            return $res;
+
+        }
+
+       
+            
+    }
+
+    public function update_orders($name, $phone, $address, $desc, $orderid)
+    {
+        try{
+            
+            $data = $this->conn->prepare("UPDATE `orders` SET `delivery_name` = :names , `phone_number` = :phone , `address` = :addresss , `descriptions` = :descs  WHERE `order_id` = :pid ;");
+            $data->bindParam(':names', $name);
+            $data->bindParam(':phone', $phone);
+            $data->bindParam(':addresss', $address);
+            $data->bindParam(':descs', $desc);
+            $data->bindParam(':pid', $orderid);
+
+            
+
+            $data->execute();
+
+
+            return "Detail Updated";
+
+        }catch(Exception $e)
+        {
+            //echo "Commit Failed : " . $e->getMessage();
+            return $e->getMessage();
+
+
+        }
+        
+    }
+
+     
+
+     
+
    
     
 }

@@ -157,7 +157,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: origin_path + '/Controllers/index.php?action=login_members',
+                    url: origin_path + '/Controllers/index.php?action=login_admin',
                     data: { username_admin: $('#email_member').val(), 
                             password_admin: $('#password_member').val()
                             },
@@ -167,11 +167,11 @@
                                         // Run the code here that needs
                                         //    to access the data returned
                                         //$('#test').html(data);
-                                        alert(datas.Response);
-                                        switch(datas.Response)
+                                        alert(datas.responses);
+                                        switch(datas.responses)
                                         {
                                             case "Empty Email":
-                                                alert(datas.Response);
+                                                alert(datas.responses);
                                             break;
                                             case "Empty password":
                                             break;

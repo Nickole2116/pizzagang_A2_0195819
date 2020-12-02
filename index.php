@@ -70,7 +70,7 @@
                  */
                 $update_log = $db_query->update_log_visitor($cur_time, 3, 2, $cur_session);
 
-                header("Location: ./Views/member/home.html");
+                header("Location: ./Views/admin/dashboard.html");
 
             break;
             case 'visitor':

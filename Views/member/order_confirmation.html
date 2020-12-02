@@ -34,35 +34,43 @@
                     
                 </div>
                 <div class="col-12 col-lg-4 col-xs-12 col-sm-4 bg-dark" style="padding-left: 0px;padding-right: 0px;margin-left: 0px;margin-right: 0px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
-                    <div id="total_page" style="padding-top: 50px;">
-                        <br>
+                    <div id="total_page" style="padding-top: 30px;">
+                        
                         <!--Delivery Detail-->
                         <div>
                             <form name="track_promo">
+                                <div style="text-align: center;color: ivory;">
+                                    <small><b>30</b> pts = <b>1</b> Pizza Slides</small><br>
+                                    <h6 style="font-weight: 900;color: gold;" id="get_member_point">2 pts</h6>
+                                    <small>Pizza Point Redeem | </small>
+                                    <select id="redeem_value" style="background: none;border: 1px solid white;"><option value="0">0</option></select><BR><br>
+                                </div>
+
                                 <small style="color: ivory;"> &nbsp;Promotion Code : </small><br>
                                 <input id="promo_code" type="text" value="" name="promo_code" placeholder="Promotion Code (optional)" style="text-align: center;font-size: 12px;width: 90%;margin-right: 10px;padding: 10px;border-top-right-radius: 20px;border-bottom-right-radius: 20px;border:none;">
                                 <i class="fa fa-spinner fa-spin" style="color: burlywood;display: none;" id="loading"></i>
-                                <br><br>
+                                <br>
+
 
 
                                 <small style="color: ivory;"> &nbsp;Delivery Name : </small><br>
                                 <input id="del_name" type="text" placeholder="Your Delivery Name" style="text-align: center;font-size: 12px;width: 90%;margin-right: 10px;padding: 10px;border-top-right-radius: 20px;border-bottom-right-radius: 20px;border:none;" required>
-                                <br><br>
+                                <br>
 
                                 <small style="color: ivory;"> &nbsp;Address : </small><br>
                                 <input id="del_address" type="text" placeholder="Your Home Address" style="text-align: center;font-size: 12px;width: 90%;margin-right: 10px;padding: 10px;border-top-right-radius: 20px;border-bottom-right-radius: 20px;border:none;" required>
-                                <br><br>
+                                <br>
 
 
 
                                 <small style="color: ivory;"> &nbsp;Phone Number : </small><br>
                                 <input id="del_phone" type="number" placeholder="Your Phone Number" style="text-align: center;font-size: 12px;width: 90%;margin-right: 10px;padding: 10px;border-top-right-radius: 20px;border-bottom-right-radius: 20px;border:none;" required>
-                                <br><br>
+                                <br>
 
 
                                 <small style="color: ivory;"> &nbsp;Email Address : </small><br>
                                 <input id="del_email" type="email" placeholder="Your Email Address" style="text-align: center;font-size: 12px;width: 90%;margin-right: 10px;padding: 10px;border-top-right-radius: 20px;border-bottom-right-radius: 20px;border:none;" required>
-                                <br><br>
+                                <br>
 
                                 <small style="color: ivory;"> &nbsp;Descriptions : </small><br>
                                 <input id="del_desc" type="text" placeholder="(Optional)" style="text-align: center;font-size: 12px;width: 90%;margin-right: 10px;padding: 10px;border-top-right-radius: 20px;border-bottom-right-radius: 20px;border:none;">
@@ -100,6 +108,7 @@
 
                 $(document).ready(function(){
                     load_confirm();
+                    load_redeem_value();
 
                     $('#promo_code').keyup(function(){
                         load_confirm();
@@ -197,6 +206,55 @@
 
                 }
 
+                function load_redeem_value()
+                {
+                    var projectname = window.location.pathname;
+                    var slice_projname = projectname.split("/");
+                    var origin_path = window.location.origin + "/" + slice_projname[1];
+                    var base_url = origin_path + '/Controllers/index.php?action=get_member_details';
+
+                    $.ajax({
+                        type: "GET",
+                        url: base_url,
+                        dataType: 'JSON',
+                        success: function(datas) {
+                            // Run the code here that needs
+                            //    to access the data returned
+                            //$('#test').html(data);
+                            //alert(datas[0].member_pizza_point);
+                            var cur_point = datas[0].member_pizza_point;
+                            $('#get_member_point').html(cur_point + " pts");
+
+                            if(cur_point > 30)
+                            {
+                                var pizza_slide = cur_point/30;
+                                var myfloat = parseFloat(pizza_slide);
+                                var cur_slides = Math.trunc(myfloat);
+                                var used_point = cur_slides * 30;
+                                var remain_point = cur_point - used_point; 
+                                for(var i=1;i<=cur_slides;i++)
+                                {
+                                    $('#redeem_value').append('<option value="'+i+'">'+i+'</option>');
+
+                                }
+
+                            }else
+                            {
+                                $('#redeem_value').text('<option value="0">0</option>');
+                            }
+                            //window.location.href="./orders_review.html";
+                            //var decode_rec = JSON.parse(datas);
+                            //$("#test").html(decode_rec.husband);
+                        },
+                        error: function() {
+                            alert('Empty Cart');
+                        }
+                    });
+
+
+
+                }
+
                 function submit_order()
                 {
                     var projectname = window.location.pathname;
@@ -215,6 +273,8 @@
                     var del_phone = $('#del_phone').val();
                     var del_email = $('#del_email').val();
                     var del_desc = $('#del_desc').val();
+                    var del_redeem = $('#redeem_value').val();
+                    
 
                     if(promotion_cur_code > 0)
                     {
@@ -244,7 +304,8 @@
                                 desc : del_desc,
                                 totalAmount: full_total,
                                 tax : tax_total,
-                                promoval : prom },
+                                promoval : prom,
+                                redeem_value : del_redeem},
                         success: function(datas) {
                             // Run the code here that needs
                             //    to access the data returned

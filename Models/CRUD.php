@@ -43,6 +43,44 @@
 
         }
 
+        public function get_discount_listings_limit_visitor()
+        {
+            $data = $this->conn->prepare("SELECT * FROM `promotion` JOIN promotion_rate ON promotion.promotion_rate_id = promotion_rate.promo_rate_id WHERE promotion.require_roles IS NULL");            
+            $data->execute();
+            $res = $data->fetchAll();
+            if(empty($res))
+            {
+                return null;
+            }else{
+                //$ress = array("Products"=>$res);
+                //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+                
+                return $res;
+
+            }
+
+
+        }
+
+        public function get_discount_listings_limit_member()
+        {
+            $data = $this->conn->prepare("SELECT * FROM `promotion` JOIN promotion_rate ON promotion.promotion_rate_id = promotion_rate.promo_rate_id WHERE promotion.require_roles = 'MEMBER' ;");            
+            $data->execute();
+            $res = $data->fetchAll();
+            if(empty($res))
+            {
+                return null;
+            }else{
+                //$ress = array("Products"=>$res);
+                //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+                
+                return $res;
+
+            }
+
+
+        }
+
         public function get_type_listings($types)
         {
             /*
@@ -84,6 +122,26 @@
                 //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
                 
                 return $res;
+
+            }
+
+        }
+
+        public function update_pizza_point($upt_point, $memberid)
+        {
+            try{
+                
+                $data = $this->conn->prepare("UPDATE `member` SET `member_pizza_point` = :val WHERE `member`.`memberid` = :mem ;");
+                $data->bindParam(':val', $upt_point);
+                $data->bindParam(':mem', $memberid);
+                $data->execute();
+
+                return "updated";
+
+            }catch(Exception $e)
+            {
+                $data->rollback();
+                echo "Commit Failed : " . $e->getMessage();
 
             }
 
@@ -661,6 +719,26 @@
             $count = $data->rowCount();
             
             return $count;
+        }
+
+        public function fetch_promo_code_member($promocode)
+        {
+            $data = $this->conn->prepare("SELECT * FROM `promotion` JOIN `promotion_rate` ON promotion.promotion_rate_id = promotion_rate.promo_rate_id WHERE promotion.promo_code = :cod AND promotion.require_roles = 'MEMBER';");
+            $data->bindParam(':cod', $promocode);
+            $data->execute();
+
+            $res = $data->fetch();
+            return $res;
+        }
+
+        public function fetch_promo_code_visitor($promocode)
+        {
+            $data = $this->conn->prepare("SELECT * FROM `promotion` JOIN `promotion_rate` ON promotion.promotion_rate_id = promotion_rate.promo_rate_id WHERE promotion.promo_code = :cod AND promotion.require_roles IS NULL ;");
+            $data->bindParam(':cod', $promocode);
+            $data->execute();
+
+            $res = $data->fetch();
+            return $res;
         }
 
         public function view_order($token_acc)
@@ -1471,6 +1549,102 @@
 
         }
         
+    }
+
+    public function delete_orders($product_id)
+    {
+        try{
+            
+            $data = $this->conn->prepare("DELETE FROM orders WHERE order_id = :pids ;");
+            $data->bindParam(':pids', $product_id);
+
+            $data->execute();
+
+            $return = $product_id . "Had Been Deleted";
+
+            return $return;
+
+        }catch(Exception $e)
+        {
+            //echo "Commit Failed : " . $e->getMessage();
+            return $e->getMessage();
+
+
+        }
+        
+
+    }
+
+    public function delete_orders_trx($product_id)
+    {
+        try{
+            
+            $data = $this->conn->prepare("DELETE FROM orders_trx WHERE order_id = :pids ;");
+            $data->bindParam(':pids', $product_id);
+
+            $data->execute();
+
+            $return = $product_id . "Had Been Deleted";
+
+            return $return;
+
+        }catch(Exception $e)
+        {
+            //echo "Commit Failed : " . $e->getMessage();
+            return $e->getMessage();
+
+
+        }
+        
+
+    }
+
+    public function delete_product($product_id)
+    {
+        try{
+            
+            $data = $this->conn->prepare("DELETE FROM product WHERE product_id = :pids ;");
+            $data->bindParam(':pids', $product_id);
+
+            $data->execute();
+
+            $return = $product_id . "Had Been Deleted";
+
+            return $return;
+
+        }catch(Exception $e)
+        {
+            //echo "Commit Failed : " . $e->getMessage();
+            return $e->getMessage();
+
+
+        }
+        
+
+    }
+
+    public function delete_promotion($product_id)
+    {
+        try{
+            
+            $data = $this->conn->prepare("DELETE FROM promotion WHERE promotion_id = :pids ;");
+            $data->bindParam(':pids', $product_id);
+
+            $data->execute();
+
+            $return = $product_id . "Had Been Deleted";
+
+            return $return;
+
+        }catch(Exception $e)
+        {
+            //echo "Commit Failed : " . $e->getMessage();
+            return $e->getMessage();
+
+
+        }
+        
+
     }
 
      

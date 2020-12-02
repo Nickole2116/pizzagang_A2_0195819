@@ -316,6 +316,32 @@ load_selected_data(val);
 
                 }
 
+                function delete_promo(pid)
+                {
+                    var projectname = window.location.pathname;
+                    var slice_projname = projectname.split("/");
+                    var origin_path = window.location.origin + "/" + slice_projname[1];
+                    var base_url = origin_path + '/Controllers/index.php?action=delete_promotion';
+
+                    $.ajax({
+                        type: "POST",
+                        url: base_url,
+                        data:{ pids: pid },
+                        dataType: 'JSON',
+                        success: function(datas) {
+                            $('#view_promo').html("<tr><th>Promotion Name</th><th>Promotion Unique</th><th>Start date</th><th>Expire Date</th><th>Limit User</th><th>Rate ID</th><th>T&C</th></tr>");
+
+                            load_promotion();
+                            
+                        },
+                        error: function() {
+                            //alert('Error occured');
+                        }
+                    });
+               
+
+                }
+
                  
         </script>
 

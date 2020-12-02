@@ -314,6 +314,30 @@
                     });
 
                 }
+
+                function delete_product(pid)
+                {
+                   
+                    var projectname = window.location.pathname;
+                    var slice_projname = projectname.split("/");
+                    var origin_path = window.location.origin + "/" + slice_projname[1];
+                    var base_url = origin_path + '/Controllers/index.php?action=delete_product';
+
+                    $.ajax({
+                        type: "POST",
+                        url: base_url,
+                        data:{ pids: pid },
+                        dataType: 'JSON',
+                        success: function(datas) {
+                            $('#view_product').html(" ");
+                            load_products();
+                            
+                        },
+                        error: function() {
+                            //alert('Error occured');
+                        }
+                    });
+                }
                 
             </script>
         

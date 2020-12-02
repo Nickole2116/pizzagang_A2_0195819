@@ -19,30 +19,30 @@
             #main {
                 margin-left: auto;
                 margin-right: auto;
-            width: 80%;
-            display: flex;
-            /*flex-direction: row;*/
-            overflow-x: auto;
-            padding: 5px;
+                width: 80%;
+                display: flex;
+                /*flex-direction: row;*/
+                overflow-x: auto;
+                padding: 5px;
             }
 
             #main div {
-            width:200px;
+                width:200px;
             
             }
 
             #main_nav {
                 margin-left: auto;
                 margin-right: auto;
-            width: 80%;
-            display: flex;
-            /*flex-direction: row;*/
-            overflow-x: auto;
-            padding: 5px;
+                width: 80%;
+                display: flex;
+                /*flex-direction: row;*/
+                overflow-x: auto;
+                padding: 5px;
             }
 
             #main_nav div {
-            width:200px;
+                width:200px;
             
             }
         </style>
@@ -349,16 +349,21 @@
                 $.ajax({
                     type: "GET",
                     url: base_url,
-                    data: { action : "get_all_available_pizza_limit" },
+                    data: { action : "get_all_available_promo_limit_member" },
                     dataType: 'JSON',
                     success: function(datas) {
                         
                            
                         for(var i=0;i<datas.length;i++)
                         {
-                            $('#main').append('<div style="margin-right: 10px;"><div style="min-height:240px;text-align:left;background:#fcfbfc;margin: 5px 10px 5px 10px;  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);padding:10%;font-weight: bold;"><h4 style="font-weight:bold;font-family: "Alatsi", sans-serif;">RM '+datas[i].rate_value+' &nbsp;&nbsp;<small><sup><mark style="background-color: #ffcd3e;border-radius: 7px;"> Available </mark></sup></small></h4>'+datas[i].promotion_name+'<br><small>'+datas[i].descriptions+'</small><button style="margin-top: 10px;width: 100%;background: gold;border: 4px solid gold;border-radius: 5px;"><b>Claim Now</b></button></div></div>');
+                            var code = datas[i].promo_code;
+                            $('#main').append('<div style="margin-right: 10px;"><div style="min-height:240px;text-align:left;background:#fcfbfc;margin: 5px 10px 5px 10px;  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);padding:10%;font-weight: bold;"><h4 style="font-weight:bold;font-family: "Alatsi", sans-serif;">RM '+datas[i].rate_value+' &nbsp;&nbsp;<small><sup><mark style="background-color: #ffcd3e;border-radius: 7px;"> Available </mark></sup></small></h4>'+datas[i].promotion_name+'<br><small>'+datas[i].descriptions+'</small><button style="margin-top: 10px;width: 100%;background: gold;border: 4px solid gold;border-radius: 5px;"><b>'+datas[i].promo_code+'</b></button></div></div>');
                             //alert(datas[i].promotion_name);
                         }
+
+                     
+
+                        
                         
                     },
                     error: function() {
@@ -654,7 +659,7 @@
                     success: function(datas) {
 
                         //get count from cart
-                        $('#username_access').html("<b>"+datas[0].username + "  | 0 Pts</b>");
+                        $('#username_access').html("<b>"+datas[0].username + "  | "+datas[0].member_pizza_point+" Pts</b>");
 
                         
                         
@@ -757,6 +762,12 @@
                 });
             }
 
+            function copy_text(text)
+            {
+                alert('text');
+            }
+
+            
             
         </script>
     </body>

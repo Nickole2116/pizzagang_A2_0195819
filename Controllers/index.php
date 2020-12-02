@@ -270,6 +270,52 @@ class Controller{
 
     }
 
+    public function get_all_available_promo_limit_visitor()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $data = $db_query->get_discount_listings_limit_visitor();
+
+        if(!empty($data))
+        {
+            echo json_encode($data);
+        }else
+        {
+
+            $my_functions = new My_functions();
+
+            $data = array("Response"=>"No Result Found",
+                          "Path"=>__FUNCTION__,
+                          "Actioned"=>$my_functions->now());
+            echo json_encode($data);
+
+        }
+
+    }
+
+    public function get_all_available_promo_limit_member()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $data = $db_query->get_discount_listings_limit_member();
+
+        if(!empty($data))
+        {
+            echo json_encode($data);
+        }else
+        {
+
+            $my_functions = new My_functions();
+
+            $data = array("Response"=>"No Result Found",
+                          "Path"=>__FUNCTION__,
+                          "Actioned"=>$my_functions->now());
+            echo json_encode($data);
+
+        }
+
+    }
+
     public function get_all_prod()
     {
 
@@ -683,13 +729,15 @@ class Controller{
 
         }else
         {
-            $found = $db_query->fetch_promo_code($_promocode);
+            $found = $db_query->fetch_promo_code_member($_promocode);
 
             if(empty($found))
             {
                 $status_promo =  "promocode no found";
             }else 
             {
+                //check the discount verify on member or not
+                
                 //check the promotion code was actived or not 
                 $begintime = $found['promotion_start'];
                 $endtime = $found['promotion_end'];
@@ -842,7 +890,7 @@ class Controller{
 
         }else
         {
-            $found = $db_query->fetch_promo_code($_promocode);
+            $found = $db_query->fetch_promo_code_visitor($_promocode);
 
             if(empty($found))
             {
@@ -974,6 +1022,14 @@ class Controller{
         $_total = $_POST['totalAmount'];
         $_tax = $_POST['tax'];
         $_promoval = $_POST['promoval']; //if none then no add into promo log
+        $_val_redeem = $_POST['redeem_value'];
+
+        //reduce the pizza points 
+        $datas = $db_query->get_detail_by_token($en_token);
+        $member_id = $datas['memberid'];
+        $reduce_point = $_val_redeem * 30;
+        $new_cur_point = $datas['member_pizza_point'] - $reduce_point;
+        $update = $db_query->update_pizza_point($new_cur_point, $member_id);
 
         //get member - cart listings no
         $data = $db_query->order_submit_member($_deliveryname, $_email, $_phone, $_address, $_total, $_tax, $_desc,$en_token);
@@ -988,6 +1044,15 @@ class Controller{
             //add trx and update order tables
             $ordertrx_in = $db_query->create_order_trx_member($memberid,$session,$orderid);
             $upt = $db_query->update_carts($_empty_cart,$en_token);
+
+            //add the pizza point into member profile
+            //$members = $db_query->get_member_details($en_token);
+            //$member_ids = $members[0]['memberid'];
+            $earned_point = intval($_total);
+            $cur_point_add = $data['member_pizza_point'];
+            $new_cur_points = $cur_point_add + $earned_point;
+            $update_point = $db_query->update_pizza_point($new_cur_points, $memberid);
+
 
             /**
              * --------------------------------------------------------------------------
@@ -1163,6 +1228,7 @@ class Controller{
 
         
     }
+    
 
     public function view_my_orders_visitor()
     {
@@ -1544,6 +1610,28 @@ class Controller{
 
     }
 
+    function logout_admin()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $my_functions = new My_functions();
+        $session_loads = new Session();
+        $cur_time = $my_functions->now();
+        $session = Session::get_session_id();
+        $roles = Session::userdata("role");
+        $visits = Session::userdata("visit");
+        $en_token = Session::userdata("token");
+        $en_session = $my_functions->md5_generator($session);
+        $token = " ";
+
+        $db_query->update_log_visitor($cur_time, 2, 0, $session, $token);
+        Session::unset_userdata("user");
+        Session::set_userdata("role","visitor");
+
+        echo $roles;
+
+    }
+
     function upload_file()
     {
         
@@ -1835,6 +1923,61 @@ class Controller{
         echo json_encode($return);
 
     }
+
+    public function delete_promotion()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $id = $_POST['pids'];
+        
+        $data = $db_query->delete_promotion($id);
+
+        $return = array("response"=>$data);
+        echo json_encode($return);
+
+    }
+
+    public function delete_order()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $id = $_POST['pids'];
+        
+        $data = $db_query->delete_orders($id);
+
+        $return = array("response"=>$data);
+        echo json_encode($return);
+        
+    }
+
+    public function delete_order_trx()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $id = $_POST['pids'];
+        
+        $data = $db_query->delete_orders_trx($id);
+
+        $return = array("response"=>$data);
+        echo json_encode($return);
+        
+    }
+
+    public function delete_product()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $id = $_POST['pids'];
+        
+        $data = $db_query->delete_product($id);
+
+        $return = array("response"=>$data);
+        echo json_encode($return);
+        
+        
+    }
+
+    
 
     
     

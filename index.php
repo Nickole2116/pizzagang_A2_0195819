@@ -69,7 +69,6 @@
                  * update status
                  */
                 $update_log = $db_query->update_log_visitor($cur_time, 3, 2, $cur_session);
-
                 header("Location: ./Views/admin/dashboard.html");
 
             break;
@@ -90,7 +89,11 @@
              * visitor log
              * set userdata role and visitor 
              */
-                echo "NO ROLE TAKEN.";
+            $update_log = $db_query->update_log_visitor($cur_time, 2, 0, $cur_session);
+            $visitor_token = $my_functions->md5_generator($cur_session);
+            Session::set_userdata('visit',$visitor_token);
+
+            header("Location: ./Views/visitor/index.html");
 
             break;
 

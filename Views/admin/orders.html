@@ -95,7 +95,7 @@
                         <table id="view_product">
                           <tr>
                             <th>Track No.</th>
-                            <th>Status</th>
+                            <th> Status</th>
                             <th>Cust. Name</th>
                             <th>Phone Number</th>
                             <th>Address</th>
@@ -180,7 +180,7 @@
                                 //$('#pizza_list').append(datas[i].product_name + datas[i].product_description);
                                 $('#view_product').append('<tr>'+
                                                     '<td>'+datas[i].tracking_number+'</td>'+
-                                                    '<td>'+status_word+'</td>'+
+                                                    '<td><b>'+status_word+'</b>  </td>'+
                                                     '<td>'+datas[i].delivery_name+'</td>'+
                                                     '<td>'+datas[i].phone_number+'</td>'+
                                                     '<td><small>'+datas[i].address+'</small></td>'+
@@ -204,7 +204,55 @@
 
             function delete_order(pid)
             {
-                alert(pid);
+                    var projectname = window.location.pathname;
+                    var slice_projname = projectname.split("/");
+                    var origin_path = window.location.origin + "/" + slice_projname[1];
+                    var base_url = origin_path + '/Controllers/index.php?action=delete_order';
+
+                    $.ajax({
+                        type: "POST",
+                        url: base_url,
+                        data:{ pids: pid },
+                        dataType: 'JSON',
+                        success: function(datas) {
+                            $('#view_product').html("<tr><th>Track No.</th><th>Status</th><th>Cust. Name</th><th>Phone Number</th><th>Address</th><th>Amount Spend</th><th>Descriptions</th></tr>");
+
+                            load_order();
+                            
+                        },
+                        error: function() {
+                            //alert('Error occured');
+                        }
+                    });
+                    delete_order_trx(pid);
+
+               
+
+            }
+
+            function delete_order_trx(pid)
+            {
+                    var projectname = window.location.pathname;
+                    var slice_projname = projectname.split("/");
+                    var origin_path = window.location.origin + "/" + slice_projname[1];
+                    var base_url = origin_path + '/Controllers/index.php?action=delete_order_trx';
+
+                    $.ajax({
+                        type: "POST",
+                        url: base_url,
+                        data:{ pids: pid },
+                        dataType: 'JSON',
+                        success: function(datas) {
+                            $('#view_product').html("<tr><th>Track No.</th><th>Status</th><th>Cust. Name</th><th>Phone Number</th><th>Address</th><th>Amount Spend</th><th>Descriptions</th></tr>");
+
+                            load_order();
+                            
+                        },
+                        error: function() {
+                            //alert('Error occured');
+                        }
+                    });
+               
 
             }
 
@@ -230,6 +278,7 @@
                         data:{ pids: product_id , name: namess , desc: descs, phone: phones, address: addresss},
                         dataType: 'JSON',
                         success: function(datas) {
+                            $('#view_product').html("<tr><th>Track No.</th><th>Status</th><th>Cust. Name</th><th>Phone Number</th><th>Address</th><th>Amount Spend</th><th>Descriptions</th></tr>");
 
                             load_order();
                             
@@ -309,7 +358,6 @@
                     }
 
 
-                    
                     $.ajax({
                         type: "POST",
                         url: base_url,

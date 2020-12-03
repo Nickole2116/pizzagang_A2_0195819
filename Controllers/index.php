@@ -1090,6 +1090,9 @@ class Controller{
                 {
                     $statuses = "Completed";
 
+                }else
+                {
+                    $statuses = "Failed";
                 }
                                     
                 //Return json format
@@ -1099,7 +1102,6 @@ class Controller{
                                     "Email"=>$val->email_address,
                                     "Created"=>$val->order_created_date,
                                     "Status"=>$statuses);
-                echo json_encode($data_res);
             }
 
 
@@ -1115,9 +1117,11 @@ class Controller{
                                 "Email"=>"none",
                                 "Created"=>"none",
                                 "Status"=>"none");
-            echo json_encode($data_res);
 
         }
+
+        echo json_encode($data_res);
+
 
 
 
@@ -1977,6 +1981,103 @@ class Controller{
         
     }
 
+
+    //add repeat order
+    public function add_repeat_order()
+    {
+        //auto received the latest order 
+        //then add to cart
+
+        
+
+    }
+
+    public function load_previous_order()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $my_functions = new My_functions();
+        $session_loads = new Session();
+        $cur_time = $my_functions->now();
+        $session = Session::get_session_id();
+        $roles = Session::userdata("role");
+        $visits = Session::userdata("visit");
+        $en_token = Session::userdata("token");
+        $en_session = $my_functions->md5_generator($session);
+        $token = " ";
+
+        $load = $db_query->get_previous_details($en_token);
+
+        echo json_encode($load);
+
+
+
+    }
+
+    public function load_previous_order_list()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $my_functions = new My_functions();
+        $session_loads = new Session();
+        $cur_time = $my_functions->now();
+        $session = Session::get_session_id();
+        $roles = Session::userdata("role");
+        $visits = Session::userdata("visit");
+        $en_token = Session::userdata("token");
+        $en_session = $my_functions->md5_generator($session);
+        $token = " ";
+
+        $load = $db_query->get_previous_list($en_token);
+
+        $list = $load['order_packages'];
+        $count_each = array();
+
+        $exp = explode(",",$list);
+
+        $count_v = array_count_values($exp);
+
+        foreach($count_v as $obj => $val)
+        {
+            array_push($count_each,$obj);
+        }
+
+        $implode_each = implode(',',$count_each);
+        
+        $translate = $db_query->get_listings_by_array($implode_each);
+
+        echo json_encode($translate);
+
+
+
+
+
+    }
+
+    public function update_repeat_order()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $my_functions = new My_functions();
+        $session_loads = new Session();
+        $cur_time = $my_functions->now();
+        $session = Session::get_session_id();
+        $roles = Session::userdata("role");
+        $visits = Session::userdata("visit");
+        $en_token = Session::userdata("token");
+        $en_session = $my_functions->md5_generator($session);
+        $token = " ";
+
+        $load = $db_query->get_previous_list($en_token);
+
+        $list = $load['order_packages'];
+
+        $upt = $db_query->update_carts($list,$en_token);
+
+        $res = array("response"=>$list);
+        echo json_encode($res);
+
+    }
     
 
     

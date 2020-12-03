@@ -1647,6 +1647,48 @@
 
     }
 
+    //add repeat orders 
+    public function get_previous_details($token_acc)
+    {
+        $data = $this->conn->prepare("SELECT * FROM orders JOIN orders_trx ON orders.order_id = orders_trx.order_id WHERE orders.token = :tkn ORDER BY orders.order_id DESC LIMIT 1");
+        $data->bindParam(':tkn', $token_acc);
+        $data->execute();
+            $res = $data->fetchAll();
+            if(empty($res))
+            {
+                return null;
+            }else{
+                //$ress = array("Products"=>$res);
+                //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+                
+                return $res;
+
+            }
+
+    }
+
+    public function get_previous_list($token_acc)
+    {
+        $data = $this->conn->prepare("SELECT order_packages FROM orders WHERE token = :tkn ORDER BY order_id DESC LIMIT 1;");
+            $data->bindParam(':tkn', $token_acc);
+            $data->execute();
+
+            $res = $data->fetch();
+            
+            if(empty($res))
+            {
+                return null;
+            }else{
+                //$ress = array("Products"=>$res);
+                //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+                
+                return $res;
+
+            }
+    }
+
+    
+
      
 
      

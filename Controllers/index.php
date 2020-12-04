@@ -165,6 +165,9 @@ class Controller{
                 if(!My_functions::checkemail($email_member)){
 
                     //wrong email format
+                    $sendback = array("Response"=>"Wrong Email Format",
+                                            "Messages"=>"Invalid Login Credential"
+                                            );
                 
                 }else{
 
@@ -183,7 +186,7 @@ class Controller{
                         Session::set_userdata("token",$token);
                                 
                                         //RETURN THE STATUS MESSAGE
-                        $sendback = array("Response"=>$token,
+                        $sendback = array("Response"=>'success',
                                           "Messages"=>"Success for User Login");
 
 
@@ -197,14 +200,18 @@ class Controller{
 
                     }
 
-                    echo json_encode($sendback,JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT );
                 }
             }else 
             {
                 //wrong email format- filter var
+                $sendback = array("Response"=>"Wrong Email Format",
+                                            "Messages"=>"Invalid Login Credential"
+                                            );
 
             }
         }  
+        echo json_encode($sendback);
+
     }
 
     public function login_admin()

@@ -1420,6 +1420,16 @@
 
      public function insert_promotion($name,$start,$end,$code,$desc,$rateid,$require_role)
      {
+         //check the require_role is public or not
+         if($require_role == "public")
+         {
+             $role = null;
+
+         }else
+         {
+             $role = "MEMBER";
+
+         }
         try{
             $com = $this->conn->prepare('INSERT INTO promotion VALUES(NULL , :n, :startd , :endd , :code , null , null , :qp , :descs, :rateid );');
             $com->bindParam(':n',$name);
@@ -1428,7 +1438,7 @@
             $com->bindParam(':code',$code);
             //$com->bindParam(':a',$attach);
             //$com->bindParam(':qr',NULL);
-            $com->bindParam(':qp',$require_role);
+            $com->bindParam(':qp',$role);
             $com->bindParam(':descs',$desc);
             $com->bindParam(':rateid',$rateid);
 

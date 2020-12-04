@@ -102,7 +102,7 @@
                             <div class="form-group">
                               <label for="sel-require">Limit User Role</label>
                               <select class="form-control" name="require_role" id="exampleFormControlSelect1">
-                                <option value="">Public</option>
+                                <option value="public">Public</option>
                                 <option value="###MEMBER###">Member</option>
                               </select>
                             </div>
@@ -192,7 +192,7 @@
                                                     '<td>'+datas[i].require_roles+'</td>'+
                                                     '<td>'+datas[i].promotion_rate_id+'</td>'+
                                                     '<td>'+datas[i].descriptions+'</td>'+
-                                                    '<td><button onclick="delete_promo('+datas[i].promotion_id+')" type="button" class="btn btn-danger">Delete</button> <button onclick="open_upt('+datas[i].promotion_id+')" type="button" class="btn btn-warning">Update</button></td><tr>');
+                                                    '<td><button onclick="delete_promo('+datas[i].promotion_id+')" type="button" class="btn btn-danger">Delete</button></td><td> <button onclick="open_upt('+datas[i].promotion_id+')" type="button" class="btn btn-warning">Update</button></td><tr>');
 
                             }
 
@@ -237,7 +237,7 @@
                     '<textarea class="form-control" name="promotion_descriptions" id="product_desc_upt" rows="3"></textarea></div>'+
                     '<button onclick="update_product()" class="btn btn-dark">Update</button><button onclick="close_upt()" class="btn btn-light" style="border: 1px solid grey;">Close</button></form><br><div id="selected_pid"></div><br><br></div></div></div>');
 */
-load_selected_data(val);
+                    load_selected_data(val);
 
             }
 

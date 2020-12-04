@@ -15,7 +15,7 @@
         
     </head>
     <body>
-        <div class="container-fluid">
+        <div class="container-fluid" id="all_confirmation" >
             <div class="row"> 
                 
                 <div class="col-12 col-lg-8 col-xs-12 col-sm-8" style="padding-left: 0px;padding-right: 0px;margin-left: 0px;margin-right: 0px;">
@@ -73,7 +73,7 @@
                         <br><br>
                         <a href="./my_carts.html"><h6 style="color:honeydew ;text-align: center;cursor: pointer;">Back to Cart</h6></a>
                         <br>
-                        <a href="./orders_review.html"><button onclick="submit_order()" id="btnSubmitOrder" style="background-color: gold;width: 100%;border: none;padding: 20px;font-weight: 800;font-size: 19px;color: rgb(99, 74, 10);">Place Order</button></a>
+                        <a href="#"><button onclick="submit_order()" id="btnSubmitOrder" style="background-color: gold;width: 100%;border: none;padding: 20px;font-weight: 800;font-size: 19px;color: rgb(99, 74, 10);">Place Order</button></a>
                     </div>
                 </div>
             </div>
@@ -82,6 +82,39 @@
 
 
         <div id="test"></div>
+
+         <!--After Submitted , hide Order confirmation Form , Open order Status Page-->
+         <div id="all_order_status" style="display: none;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 col-lg-12 col-sm-12 col-xs-12 bg-dark" style="padding:20px;color:white">
+                        <a href="./my_carts.html"><button class="btn btn-danger" style="float: right;">Close</button></a><br>
+                        <small>Order Tracking Number</small>
+                        <h3 id="final_tracking_number"></h3>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-lg-12 col-xs-12">
+                        <h2 id="final-status" style="font-weight: 800;padding: 30px;color: goldenrod;">New Receiced</h2>
+                        <p style="margin-left: 15px;">Order on Proceeding... Thank You. Have a Nice Day .</p>
+                        <div style="margin-left: 15px;">
+                            <small>Receiver Name : </small>
+                            <h4 id="final-name"></h4>
+                            <small>Amounts Spend : </small>
+                            <h4 id="final-price"></h4>
+                            <small id="final-date">Created by </small>
+
+                            <br><br><br>
+                            <a href="./index.html">Return to HomePage.</a>
+                        </div>
+
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>
 
         <script>
 
@@ -245,12 +278,21 @@
                                 totalAmount: full_total,
                                 tax : tax_total,
                                 promoval : prom },
+                                dataType: 'JSON',
                         success: function(datas) {
                             // Run the code here that needs
                             //    to access the data returned
                             //$('#test').html(data);
-                            //alert(datas);
-                            window.location.href="./orders_review.html";
+                            $('#final_tracking_number').html(datas.Tracking_No);
+                            $('#final-status').html(datas.Status);
+                            $('#final-name').html(datas.Delivery_name);
+                            $('#final-price').html("RM "+datas.Amount);
+                            $('#final-date').html("Created by "+datas.Created);
+                            
+                            document.getElementById('all_confirmation').style.display = "none";
+                            document.getElementById('all_order_status').style.display = "block";
+
+                            //window.location.href="./orders_review.html";
                             //var decode_rec = JSON.parse(datas);
                             //$("#test").html(decode_rec.husband);
                         },

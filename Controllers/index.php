@@ -71,18 +71,24 @@ class Controller{
         if(empty($_POST['new_username']))
         {
             //blank username
-            echo "empty username";
+            $result_c =  "EMPTY USERNAME FIELD";
+            $new_return = array("responses"=>$result_c);
+                echo json_encode($new_return);
 
         }else if(empty($_POST['new_password']))
         {
             //blank password 
-            echo "empty password";
+            $result_a =  "EMPTY PASSWORD FIELD";
+            $new_return = array("responses"=>$result_a);
+                echo json_encode($new_return);
 
 
         }else if(empty($_POST['new_email']) || empty($_POST['new_phone']))
         {
             //blank email or phone 
-            echo "empty vals";
+            $result_f =  "EMPTY EMAIL FIELD";
+            $new_return = array("responses"=>$result_f);
+                echo json_encode($new_return);
 
         }else
         {
@@ -97,21 +103,32 @@ class Controller{
             $pass_encrypt = $my_functions->md5_generator($pass_salt);
 
             $return = $db_query->member_register($cur_session, $username, $pass_encrypt, $phone, $email);
-            echo json_encode($return);
 
             if($return["responses"] == "MEMBER CREATED")
             {
                 $tokens = $return["token"];
                 Session::set_userdata("role","member");
                 Session::set_userdata("token",$tokens);
+                $result = $return["responses"];
+                $new_return = array("responses"=>$result);
+                echo json_encode($new_return);
+
                 
 
             }else
             {
+                $result_m = "MEMBER FAILED ON CREATED";
+                $new_return = array("responses"=>$result_m);
+                echo json_encode($new_return);
+
+
                 //error of insert
                 //other repsonses 
 
             }
+
+
+
  
 
         }
@@ -2076,6 +2093,137 @@ class Controller{
 
         $res = array("response"=>$list);
         echo json_encode($res);
+
+    }
+
+    public function get_limit_proceeding_orders()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $my_functions = new My_functions();
+        $session_loads = new Session();
+        $cur_time = $my_functions->now();
+        $session = Session::get_session_id();
+        $roles = Session::userdata("role");
+        $visits = Session::userdata("visit");
+        $en_token = Session::userdata("token");
+        $en_session = $my_functions->md5_generator($session);
+
+        //get the record havent completed (limit first 20 rows)
+        $limited_record = $db_query->get_limit_active_record();
+        //print_r($limited_record);
+        //echo $limited_record[0]['order_packages'];
+        $all = array();
+        $array_product_name = array();
+
+        for($i = 0;$i<count($limited_record);$i++)
+        {
+            //$list = $limited_record[$i]['order_packages'];
+            //$data = $db_query->get_listings_by_array($list);
+            //$count = count($data);
+            
+
+            /*for($i = 0;$i<$count;$i++)
+            {
+                array_push($array_product_name,"yes");
+            }*/
+            //print_r($array_product_name);
+            //$text = implode(",",$array_product_name);
+
+            //store into the one array
+            $each = array("tracking_number"=>$limited_record[$i]['tracking_number'],
+                            "delivery_name"=>$limited_record[$i]['delivery_name'],
+                            "product_list"=>$limited_record[$i]['order_packages'],
+                            "phone_number"=>$limited_record[$i]['phone_number'],
+                            "address"=>$limited_record[$i]['address'],
+                            "email_address"=>$limited_record[$i]['email_address'],
+                            "order_trx_id"=>$limited_record[$i]['orders_trx_id'],
+                            "status"=>$limited_record[$i]['status']);
+
+            array_push($all,$each);
+            
+            
+        }
+
+        //$NOW = array("responses"=>$limited_record);
+
+        echo json_encode($all);
+
+
+        
+
+    }
+
+    public function get_uncompleted()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $limited_record = $db_query->get_uncompleted();
+        
+        echo json_encode($limited_record);
+
+
+    }
+
+    public function get_completed()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $limited_record = $db_query->get_completed();
+        
+        echo json_encode($limited_record);
+
+
+    }
+
+    public function get_active_promotion()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $my_functions = new My_functions();
+        $session_loads = new Session();
+        $cur_time = $my_functions->now();
+        $session = Session::get_session_id();
+        $roles = Session::userdata("role");
+        $visits = Session::userdata("visit");
+        $en_token = Session::userdata("token");
+        $en_session = $my_functions->md5_generator($session);
+        
+        $limited_record = $db_query->get_active_promotion($cur_time);
+        
+        echo json_encode($limited_record);
+
+
+    }
+
+    public function fetch_product_name()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $my_functions = new My_functions();
+        $session_loads = new Session();
+        $cur_time = $my_functions->now();
+        $session = Session::get_session_id();
+        $roles = Session::userdata("role");
+        $visits = Session::userdata("visit");
+        $en_token = Session::userdata("token");
+        $en_session = $my_functions->md5_generator($session);
+
+        $oids = $_POST['oids'];
+
+        $return = $db_query->get_packages_order($oids);
+        $get = $db_query->get_listings_by_array($return);
+
+        $product_name = array();
+
+        for($i = 0;$i<count($get);$i++)
+        {
+            array_push($product_name, $get[$i]['product_name']);
+        }
+        $string = implode(",",$product_name);
+        echo $string;
+
+
 
     }
     

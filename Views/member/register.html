@@ -1,45 +1,134 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>register | MEMBER PANEL</title>
+        <title>Register | MEMBER PANEL</title>
         <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="http://localhost/Assignment2_pizzagang/inc/js/bootstrap.min.js"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com"> 
+        <link href="https://fonts.googleapis.com/css2?family=Alatsi&family=Caveat:wght@700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="http://localhost/Assignment2_pizzagang/inc/css/bootstrap.min.css" >
+        <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
         
 
     </head>
     <body>
-        this is register page
+        <DIV class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-lg-12 col-xs-12 bg-dark" style="padding: 20px;">
+                    <div style="float: left;">
+                        <a href="../visitor/index.html"><button style="background:none;border: none;margin-top: 5px;"><svg width="30px" height="30px" viewBox="0 0 20 20" class="bi bi-arrow-left" fill="white" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                      </svg></button></a>
+                    </div>
+                    <h3 style="text-align: center;color: white;">User Register</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-12 col-lg-12 col-xs-12" style="padding: 20px 50px;">
+
+                    <form>
+                        <div class="form-group">
+                          <label for="exampleInputEmail12">Username</label>
+                          <input type="text" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter username">
+                          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail13">Email address (Login Purposes)</label>
+                            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                          </div>
+                          
+                        <div class="form-group">
+                          <label for="exampleInputPassword14">Password</label>
+                          <input type="password" class="form-control" id="password" placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail15">Phone Number</label>
+                            <input type="phone" class="form-control" id="phone" aria-describedby="emailHelp" placeholder="Enter Phone">
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                          </div>
+                        <button id="btnSubmit" class="btn btn-warning"><b>Register</b></button>
+                      </form>
+                    
+                </div>
+            </div>
+
+        </DIV>
 
         <div id="test"></div>
 
         <script>
 
-            var projectname = window.location.pathname;
-            var slice_projname = projectname.split("/");
-            var origin_path = window.location.origin + "/" + slice_projname[1];
-
-
-            var base_url = origin_path + '/Controllers/index.php?action=register_member';
-            
-            $.ajax({
-                type: "POST",
-                url: base_url,
-                data: { new_username : "pizzagang2", 
-                        new_password: "nickole@1234",
-                        new_email : "nickoletan53@gmail.com",
-                        new_phone : "01928349381" },
-                success: function(datas) {
-                    // Run the code here that needs
-                    //    to access the data returned
-                    //$('#test').html(data);
-                    alert(datas);
-                    //var decode_rec = JSON.parse(datas);
-                    //$("#test").html(decode_rec.husband);
-                },
-                error: function() {
-                    alert('Error occured');
-                }
+            $(document).ready(function(){
+                register();
             });
+
+            function register()
+            {
+                $('#btnSubmit').click(function(event){
+                    var projectname = window.location.pathname;
+                    var slice_projname = projectname.split("/");
+                    var origin_path = window.location.origin + "/" + slice_projname[1];
+                    var base_url = origin_path + '/Controllers/index.php?action=register_member';
+
+                    var new_name = $('#username').val();
+                    var new_password = $('#password').val();
+                    var new_email = $('#email').val();
+                    var new_phone = $('#phone').val();
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: base_url,
+                        data: { new_username : new_name , 
+                                new_password: new_password ,
+                                new_email : new_email ,
+                                new_phone : new_phone },
+                        dataType:'JSON',
+                        success: function(datas) {
+                            // Run the code here that needs
+                            //    to access the data returned
+                            //$('#test').html(data);
+                            //alert(datas);
+
+                            if(datas.responses == "MEMBER CREATED")
+                            {
+                                window.location.href = "./home.html";
+
+
+                            }else if(datas.responses == "DUPLICATE EMAIL")
+                            {
+                                alert(datas.responses);
+
+
+                            }else if(datas.responses == "INVALID PASSWORD LENGTH")
+                            {
+                                alert(datas.responses);
+
+                                
+                            }else{
+                                alert(datas.responses);
+
+
+                            }
+                            
+                            //var decode_rec = JSON.parse(datas);
+                            //$("#test").html(decode_rec.husband);
+                        },
+                        error: function() {
+                            alert('Error occured');
+                        }
+                    });
+                    event.preventDefault();
+
+                });
+                
+            }
+
+            
         </script>
         
 

@@ -58,10 +58,53 @@
             <button class="btn btn-danger" style="margin:10px;" onclick="logout()">Log Out </button>
         </div>
 
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-lg-12 col-xs-12 col-sm-12">
+                    <h3 style="font-weight: 800;margin-bottom: 30px;">Dashboard</h3>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 col-lg-3 col-xs-3 col-xs-12" style="color:#34676e;background-color: #63bcc9;box-shadow: 0 4px 8px 0 rgba(84, 176, 238, 0.2), 0 6px 20px 0 rgba(84, 176, 238, 0.19);padding:5px;padding:15px;margin-right: 15px;margin: 5px;border-radius: 10px;">
+                                <h6>Total Uncompleted Orders</h6>
+                                <h3 id="uncompleted">0</h3>
+                            </div>
+                            <div class="col-12 col-lg-3 col-xs-3 col-xs-12" style="color:#655469;background-color: #cdb3d4;box-shadow: 0 4px 8px 0 rgba(205, 98, 255, 0.2), 0 6px 20px 0 rgba(205, 98, 255, 0.19);padding:5px;padding:15px;margin: 5px;border-radius: 10px;">
+                                <h6>Total Completed Orders</h6>
+                                <h3 id="completed">0</h3>
+                            </div>
+                            <div class="col-12 col-lg-3 col-xs-3 col-xs-12" style="color:#816146;background-color: #ffbe88;box-shadow: 0 4px 8px 0 rgba(238, 171, 84, 0.2), 0 6px 20px 0 rgba(238, 171, 84, 0.19);padding:5px;padding:15px;margin: 5px;border-radius: 10px;">
+                                <h6>Total Actived Promotion </h6>
+                                <h3 id="actived">0</h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-lg-12 col-xs-12 col-xs-12">
+                                <br>
+                                <div style="background-color: white;">
+                                    <small><b>Current Order Boardcast</b></small> 
+                                    <div style="width: 100%;height: 1px;background-color: thistle;"></div>
+                                    
+                                    <div class="container-fluid" id="current_tracking"></div>
+                                    <div style="text-align: center;">
+                                        <h4>...</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
 
         <script>
             $(document).ready(function(){
-
+                load_orders_active();
+                load_uncompleted();
+                load_completed();
+                get_active_promotion();
             });
             function logout()
             {
@@ -86,6 +129,151 @@
                     }
                 });
                 
+            }
+
+            function load_orders_active()
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+                var base_url = origin_path + '/Controllers/index.php';
+                
+                $.ajax({
+                    type: "GET",
+                    url: base_url,
+                    data: { action : "get_limit_proceeding_orders" },
+                    dataType: 'JSON',
+                    success: function(datas) {
+
+                        //get count from cart
+                        //$('#username_access').html("<b>"+datas[0].username + "  | 0 Pts</b> <button id='btnLogout' style='border-radius:10px;background:none;border:1.5px solid #cf9900;color:#cf9900;font-weight:bolder;'>Logout</button>");
+                        for(var i = 0;i<datas.length; i++)
+                        {
+                            var statusword = "";
+                            if(datas[i].status == 1)
+                            {
+                                statusword = "Received";
+                            }else if(datas[i].status == 2)
+                            {
+                                statusword = "Pending";
+
+
+                            }
+                            else if(datas[i].status == 3)
+                            {
+                                statusword = "Delivering";
+
+                                
+                            }
+                            else if(datas[i].status == 4)
+                            {
+                                statusword = "Completed";
+
+                                
+                            }
+                            //alert(datas[0]['tracking_number']);
+                            $('#current_tracking').append('<div class="row"><div class="col-12 col-sm-6 col-lg-6 col-xs-12"><br>'+
+                                                '<h6>'+datas[i].tracking_number+'</h6><small>Products ID ('+datas[i].product_list+') on queue...</small></div>'+
+                                                '<div class="col-12 col-sm-6 col-lg-6 col-xs-12"><button class="btn btn-dark" style="margin-top: 10px;float: right;">'+statusword+'</button></div></div>');
+
+
+                        }
+                        //window.location.href = "../visitor/";                  
+                    },
+                    error: function() {
+                        alert('Error occured');
+                    }
+                });
+
+            }
+
+            function load_uncompleted()
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+                var base_url = origin_path + '/Controllers/index.php';
+                
+                $.ajax({
+                    type: "GET",
+                    url: base_url,
+                    data: { action : "get_uncompleted" },
+                    dataType: 'JSON',
+                    success: function(datas) {
+
+                        
+                            //alert(datas[0]['tracking_number']);
+                            $('#uncompleted').html(datas.length);
+
+                        
+                        //window.location.href = "../visitor/";                  
+                    },
+                    error: function() {
+                        alert('Error occured');
+                    }
+                });
+
+
+
+            }
+
+            function load_completed()
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+                var base_url = origin_path + '/Controllers/index.php';
+                
+                $.ajax({
+                    type: "GET",
+                    url: base_url,
+                    data: { action : "get_completed" },
+                    dataType: 'JSON',
+                    success: function(datas) {
+
+                        
+                            //alert(datas[0]['tracking_number']);
+                            $('#completed').html(datas.length);
+
+                        
+                        //window.location.href = "../visitor/";                  
+                    },
+                    error: function() {
+                        alert('Error occured');
+                    }
+                });
+
+
+
+            }
+            function get_active_promotion()
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+                var base_url = origin_path + '/Controllers/index.php';
+                
+                $.ajax({
+                    type: "GET",
+                    url: base_url,
+                    data: { action : "get_active_promotion" },
+                    dataType: 'JSON',
+                    success: function(datas) {
+
+                        
+                            //alert(datas[0]['tracking_number']);
+                            $('#actived').html(datas.length);
+
+                        
+                        //window.location.href = "../visitor/";                  
+                    },
+                    error: function() {
+                        alert('Error occured');
+                    }
+                });
+
+
+
             }
         </script>
 

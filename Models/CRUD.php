@@ -1290,6 +1290,86 @@
 
      }
 
+     public function get_all_orders_search($search,$param=0)
+     {
+         //1-this month,3-this week 4-today 5-completed 6-pending 
+         //7-delivery 8-new , all-default
+         switch($search)
+         {
+             case "1":
+                $data = $this->conn->prepare("SELECT * FROM orders JOIN orders_trx ON orders.order_id = orders_trx.order_id WHERE MONTH(orders.order_created_date) = :cur_mon ; ");
+                $data->bindParam(':cur_mon',$param);
+                $data->execute();
+                $res = $data->fetchAll();
+
+             break;
+             case "3":
+
+                $data = $this->conn->prepare("SELECT * FROM orders JOIN orders_trx ON orders.order_id = orders_trx.order_id WHERE YEARWEEK(orders.order_created_date) = YEARWEEK(now());");
+                //$data->bindParam(':cur_mon',$param);
+                $data->execute();
+                $res = $data->fetchAll();
+
+                
+                
+             break;
+             case "4":
+                $data = $this->conn->prepare("SELECT * FROM orders JOIN orders_trx ON orders.order_id = orders_trx.order_id WHERE orders.order_created_date = now();");
+                //$data->bindParam(':cur_mon',$param);
+                $data->execute();
+                $res = $data->fetchAll();
+                
+             break;
+             case "5":
+                $data = $this->conn->prepare("SELECT * FROM orders JOIN orders_trx ON orders.order_id = orders_trx.order_id WHERE orders_trx.status = 4;");
+                //$data->bindParam(':cur_mon',$param);
+                $data->execute();
+                $res = $data->fetchAll();
+                
+             break;
+             case "6":
+                $data = $this->conn->prepare("SELECT * FROM orders JOIN orders_trx ON orders.order_id = orders_trx.order_id WHERE orders_trx.status = 3;");
+                //$data->bindParam(':cur_mon',$param);
+                $data->execute();
+                $res = $data->fetchAll();
+                
+             break;
+             case "7":
+                $data = $this->conn->prepare("SELECT * FROM orders JOIN orders_trx ON orders.order_id = orders_trx.order_id WHERE orders_trx.status = 2;");
+                //$data->bindParam(':cur_mon',$param);
+                $data->execute();
+                $res = $data->fetchAll();
+                
+             break;
+             case "8":
+                $data = $this->conn->prepare("SELECT * FROM orders JOIN orders_trx ON orders.order_id = orders_trx.order_id WHERE orders_trx.status = 1;");
+                //$data->bindParam(':cur_mon',$param);
+                $data->execute();
+                $res = $data->fetchAll();
+                
+             break;
+             default:
+                $data = $this->conn->prepare("SELECT * FROM orders JOIN orders_trx ON orders.order_id = orders_trx.order_id ; ");
+                $data->execute();
+                $res = $data->fetchAll();
+
+             break;
+         }
+        
+
+        if(empty($res))
+        {
+            return null;
+        }else{
+            //$ress = array("Products"=>$res);
+            //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+            
+            return $res;
+
+        }
+
+     }
+
      public function get_promo_used()
      {
         $data = $this->conn->prepare("SELECT * FROM `promotion_log` JOIN promotion ON promotion_log.promotion_code = promotion.promo_code JOIN orders ON promotion_log.order_id = orders.order_id ;");
@@ -1799,6 +1879,26 @@ public function get_packages_order($oid)
     $res = $data->fetch();
 
     return $res['order_packages'];
+}
+
+public function get_tracking_order($tracking)
+{
+    $data = $this->conn->prepare("SELECT * FROM orders JOIN orders_trx ON orders.order_id = orders_trx.order_id WHERE orders_trx.tracking_number = :oids ORDER BY orders.order_id ASC LIMIT 1;");
+    $data->bindParam(':oids', $tracking);
+    $data->execute();
+    $res = $data->fetch();
+            if(empty($res))
+            {
+                return null;
+            }else{
+                //$ress = array("Products"=>$res);
+                //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+                
+                return $res;
+
+            }
+
+
 }
      
 

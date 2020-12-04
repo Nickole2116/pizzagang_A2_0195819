@@ -11,6 +11,13 @@
 
         }
 
+        public function cur_month()
+        {
+            $month = new DateTime("now", new DateTimeZone('Asia/Kuala_Lumpur'));
+            return $month->format('m');
+
+        }
+
         public function md5_generator($sand)
         {
             return md5($sand);

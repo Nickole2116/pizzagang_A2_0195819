@@ -88,9 +88,35 @@
         </div>
         <br><br>
         <div class="container">
+            <div class="row">
+                    <!--Search AJAX Order-->
+                    <div class="col-12 col-lg-12 col-xs-12 col-sm-12">
+                        <button onclick="search_order(5)" class="btn btn-primary">Filter : Completed</button>
+                        <button onclick="search_order(6)" class="btn btn-primary">Filter : Pending</button>
+                        <button onclick="search_order(7)" class="btn btn-primary">Filter : Delivery</button>
+                        <button onclick="search_order(8)" class="btn btn-primary">Filter : New Received</button>
+
+                        <form style="float: right;">
+                            <span style="font-size:large;padding-top: 5px;"><b>Filter By :</b></span>
+                            <select class="form-control" id="time-search" style="width: auto;" onchange="search_order(this.value)">
+                                <option value="all">All</option>
+                                <option value="1">This Month</option>
+                                <option value="3">This week</option>
+                                <option value="4">Today</option>
+                              </select>
+                              
+                              
+
+                              
+                        </form>
+                        <br>
+                    </div>
+                    
+            </div>
             
             <div class="row">
                 <div class="col-12 col-lg-12 col-xs-12 col-sm-12">
+                    
                     <div style="overflow-x:auto;">
                         <table id="view_product">
                           <tr>
@@ -403,6 +429,97 @@
                             alert('Error occured');
                         }
                     });
+
+
+            }
+
+            function search_order(val)
+            {
+                var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                var base_url = origin_path + '/Controllers/index.php?action=get_all_orders_search';
+                
+                $.ajax({
+                    type: "POST",
+                    url: base_url,
+                    data:{ search: val},
+                    dataType: 'JSON',
+                    success: function(datas) {
+
+                        if(datas.Response == "No Result Found")
+                        {
+                            $('#view_product').html("<tr><th>Track No.</th><th>Status</th><th>Cust. Name</th><th>Phone Number</th><th>Address</th><th>Amount Spend</th><th>Descriptions</th></tr>");
+
+                            $('#view_product').append('<span>'+datas.Response+'</span>');
+
+                        }else
+                        {
+                            $('#view_product').html("<tr><th>Track No.</th><th>Status</th><th>Cust. Name</th><th>Phone Number</th><th>Address</th><th>Amount Spend</th><th>Descriptions</th></tr>");
+                            for(var i=0;i<datas.length;i++)
+                            {
+                                var total = datas[i].amounts + datas[i].taxs;
+                                var format_price = parseFloat(total).toFixed(2);
+                                var status_no = datas[i].status;
+                                var status_word = "";
+                                var next_word = "";
+                                var type_but = "";
+                                switch(status_no)
+                                {
+                                    case "1":
+                                    status_word = "Received";
+                                    next_word = "Set Prepare";
+                                    type_but = "";
+                                    break;
+                                    case "2":
+                                    status_word = "Preparing";
+                                    next_word = "Set Delivery";
+                                    type_but = "background:#6b679c;";
+                                    break;
+                                    case "3":
+                                    status_word = "Delivering";
+                                    next_word = "Complete";
+                                    type_but = "background:#3f838b;";
+                                    break;
+                                    case "4":
+                                    status_word = "Done";
+                                    next_word = "";
+                                    type_but = "display:none";
+                                    break;
+                                    default:
+                                    status_word = "Expired";
+                                    next_word = "";
+                                    type_but = "display:none";
+                                    break;
+                                }
+                                //$('#pizza_list').append(datas[i].product_name + datas[i].product_description);
+                                $('#view_product').append('<tr>'+
+                                                    '<td>'+datas[i].tracking_number+'</td>'+
+                                                    '<td><b>'+status_word+'</b>  </td>'+
+                                                    '<td>'+datas[i].delivery_name+'</td>'+
+                                                    '<td>'+datas[i].phone_number+'</td>'+
+                                                    '<td><small>'+datas[i].address+'</small></td>'+
+                                                    '<td> RM '+format_price+'</td>'+
+                                                    '<td><small>'+datas[i].descriptions+'</small></td>'+
+                                                    '<td><button onclick="delete_order('+datas[i].order_id+')" type="button" class="btn btn-danger">Delete</button></td> <td><button onclick="open_upt('+datas[i].order_id+')" type="button" class="btn btn-warning">Update</button> </td><td><button style="'+type_but+'" onclick="change_status('+datas[i].status+','+datas[i].orders_trx_id+')" type="button" class="btn btn-dark"><small>'+next_word+'</small></button></td>'+
+                                                    '<td><button onclick="load_product_list('+datas[i].order_id+')" type="button" class="btn btn-info">View Product</button><td><tr>');
+
+
+                            }
+
+                        }
+                        
+
+                       
+                        
+                        
+                    },
+                    error: function() {
+                        //alert('Error occured');
+                    }
+                });
 
 
             }

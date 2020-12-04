@@ -10,6 +10,8 @@
         <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="http://localhost/Assignment2_pizzagang/inc/css/bootstrap.min.css" >
         <meta http-equiv="Content-Type" content="text/html" charset="utf=8">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
         
 
     </head>
@@ -28,7 +30,7 @@
                         <span style="font-weight: normal;">Search for All Order Tracks</span>
                         
                         <div class="md-form active-pink-2 mb-3" style="margin-top: 25px;">
-                            <input class="form-control" type="text" placeholder="Search" name="tracking_no" aria-label="Search">
+                            <input class="form-control" type="text" placeholder="Search" name="tracking_no" id="tracking_no" aria-label="Search">
                           </div>
                     </div>
                 </div>
@@ -36,7 +38,7 @@
             <div class="row">
                 <div class="col-12 col-sm-12 col-lg-12 col-xs-12">
                     <div class="row">
-                        <div class="col-12 col-sm-12 col-lg-12 col-xs-12">
+                        <div class="col-12 col-sm-12 col-lg-12 col-xs-12" id="detail-page">
                             <h2 id="final-status" style="font-weight: 800;padding: 30px;color: goldenrod;">New Receiced</h2>
                             <p style="margin-left: 15px;">Order on Proceeding... Thank You. Have a Nice Day .</p>
                             <div style="margin-left: 15px;">
@@ -44,6 +46,10 @@
                                 <h4 id="final-name"></h4>
                                 <small>Amounts Spend : </small>
                                 <h4 id="final-price"></h4>
+                                <small>Email Address : </small>
+                                <h4 id="final-email"></h4>
+                                <small>Phone number : </small>
+                                <h4 id="final-phone"></h4>
                                 <small id="final-date">Created by </small>
     
                                 <br><br><br>
@@ -57,6 +63,77 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            $(document).ready(function(){
+                $('#tracking_no').keyup(function(){
+                    var projectname = window.location.pathname;
+                    var slice_projname = projectname.split("/");
+                    var origin_path = window.location.origin + "/" + slice_projname[1];
+                    var base_url = origin_path + '/Controllers/index.php?action=get_tracking_order';
+                    var tracking_no = $('#tracking_no').val();
+                    $.ajax({
+                        type: "POST",
+                        url: base_url,
+                        data: { tracking : tracking_no},
+                        dataType: 'JSON',
+                        success: function(datas) {
+                            var statusword = "";
+                            if(datas == null)
+                            {
+                                //$('#detail-page').html();
+                                $('#detail-page').html('<div style="margin:30px;text-align:center;"><i class="fa fa-circle-o-notch fa-spin" style="font-size:50px"></i></div>');
+
+                            }else 
+                            {
+                                if(datas.status == 1)
+                                {
+                                    statusword = "Receiving Order ...";
+
+                                }else if(datas.status == 2)
+                                {
+                                    statusword = "Pending Order ...";
+
+
+                                }else if(datas.status == 3)
+                                {
+                                    statusword = "Delivering Order ...";
+
+
+                                }else if(datas.status == 4)
+                                {
+                                    statusword = "Completed Order";
+
+
+                                }else
+                                {
+
+                                }
+                                $('#detail-page').html('<h2 id="final-status" style="font-weight: 800;padding: 30px;color: goldenrod;">'+statusword+'</h2>'+
+                                '<div style="margin-left: 15px;">'+
+                                '<small>Receiver Name : </small>'+
+                                '<h4 id="final-name">'+datas.delivery_name+'</h4>'+
+                                '<small>Amounts Spend : </small>'+
+                                '<h4 id="final-price"> RM '+datas.amounts+'</h4>'+
+                                '<small>Email Address : </small>'+
+                                '<h4 id="final-email">'+datas.email_address+'</h4>'+
+                                '<small>Phone number : </small>'+
+                                '<h4 id="final-phone">'+datas.phone_number+'</h4>'+
+                                '<small id="final-date">Created by '+datas.order_created_date+' </small>'+
+                                '<br><br><br><a href="'+origin_path+'/Controllers/index.php?action=view_orders_details&id='+datas.ref_id+'">More order details.</a></div>');
+
+
+                            }
+
+                        },
+                        error: function() {
+                            alert('Empty Cart');
+                        }
+                    });
+                });
+            });
+            
+        </script>
 
     </body>
 </html>

@@ -1491,6 +1491,33 @@ class Controller{
             }
 
             $count_array = count($format);
+            $statusword = ""; 
+
+            $status_code = $return[0]['status'];
+            /*if($status_code == 4)
+            {
+                $statusword = "test";
+            }*/
+            if($status_code == 1)
+            {
+                $statusword = "Receiving order...";
+            }else if($status_code == 2)
+            {
+                $statusword = "Pending order...";
+
+            }
+            else if($status_code == 3)
+            {
+                $statusword = "Delivering order...";
+
+            }
+            else if($status_code == 4)
+            {
+                $statusword = "Completed Order";
+
+            }else{
+                $statusword = $statusword;
+            }
 
             
 
@@ -1534,7 +1561,7 @@ class Controller{
                                         '<path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z"/>'.
                                         '<path fill-rule="evenodd" d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path fill-rule="evenodd" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"/>'.
                                         '</svg> &nbsp;'.$return[0]['delivery_name'].'</span><br><br><span style="padding-left: 10px;padding-right: 10px;font-size: 9px;">'.$return[0]['address'].'</span>'.
-                                        '<br><br><small>'.$return[0]['email_address'].' | '.$return[0]['phone_number'].'</small><br><br><h2>'.$return[0]['status'].' </h2><br>
+                                        '<br><br><small>'.$return[0]['email_address'].' | '.$return[0]['phone_number'].'</small><br><br><h2>'.$statusword.' </h2><br>
 
                                      </div>
                                      ';
@@ -2225,6 +2252,56 @@ class Controller{
 
 
 
+    }
+
+    public function get_tracking_order()
+    {
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $my_functions = new My_functions();
+        $session_loads = new Session();
+        $cur_time = $my_functions->now();
+        $session = Session::get_session_id();
+        $roles = Session::userdata("role");
+        $visits = Session::userdata("visit");
+        $en_token = Session::userdata("token");
+        $en_session = $my_functions->md5_generator($session);
+
+        $oids = $_POST['tracking'];
+
+        $track = $db_query->get_tracking_order($oids);
+
+        echo json_encode($track);
+
+    }
+
+    public function get_all_orders_search()
+    {
+        $search = $_POST['search'];
+
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $my_functions = new My_functions();
+        $session_loads = new Session();
+        $cur_time = $my_functions->now();
+        $cur_mon = $my_functions->cur_month();
+        $session = Session::get_session_id();
+        $data = $db_query->get_all_orders_search($search,$cur_mon);
+
+        if(!empty($data))
+        {
+            echo json_encode($data);
+        }else
+        {
+
+            $my_functions = new My_functions();
+
+            $data = array("Response"=>"No Result Found",
+                          "Path"=>__FUNCTION__,
+                          "Actioned"=>$my_functions->now());
+            echo json_encode($data);
+
+        }
     }
     
 

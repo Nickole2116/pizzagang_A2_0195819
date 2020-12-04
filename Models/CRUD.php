@@ -412,7 +412,9 @@
             if($check_email > 0)
             {
                 //DUPLICATE EMAIL
-                $res = "DUPLICATE EMAIL";
+                $ress = "DUPLICATE EMAIL";
+                return array("responses"=>$ress,"Created"=>$my_functions->now(),"token"=>$token_new);
+
             }else if($check_email == 0 && $check_phone == 0)
             {
                 /** CAN DO SOMETHING REGIETER HERE  */
@@ -421,7 +423,9 @@
 
                 if($passlen < 8)
                 {
-                    $res = "INVALID PASSWORD LENGTH";
+                    $limit = "INVALID PASSWORD LENGTH";
+                    return array("responses"=>$limit,"Created"=>$my_functions->now(),"token"=>$token_new);
+
                 }else{
                     /**VARIABLE NOT PROBLEM THEN */
                     $acc_num_ency = rand();
@@ -429,7 +433,7 @@
 
                     try{
 
-                        $com = $this->conn->prepare('INSERT INTO member VALUES(NULL, :username, :passwords, :sessionids , :token , "" , :phone , :email, :acc);');
+                        $com = $this->conn->prepare('INSERT INTO member VALUES(NULL, :username, :passwords, :sessionids , :token , "" , :phone , :email, :acc, 0);');
                         $com->bindParam(':username',$username);
                         $com->bindParam(':passwords',$password);
                         $com->bindParam(':sessionids',$session);
@@ -445,6 +449,8 @@
                         $now_time = $my_functions->now();
                         $updated_status_account_time = self::update_log_visitor($now_time, 1, 1 , $session, $acc_num_ency);
                         $res = "MEMBER CREATED";
+                        return array("responses"=>$res,"Created"=>$my_functions->now(),"token"=>$token_new);
+
 
 
 
@@ -459,14 +465,16 @@
             }
             else if($check_phone > 0)
             {
-                $res = "DUPLICATE PHONE";
+                $duplicated = "DUPLICATE PHONE";
+                return array("responses"=>$duplicated,"Created"=>$my_functions->now(),"token"=>$token_new);
+
 
             }else{
                 //UNKNOWN ERROR OCCUR
-                $res = "UNKNOWN";
+                return array("responses"=>"UNKNOWN","Created"=>$my_functions->now(),"token"=>$token_new);
+
             }
 
-            return array("responses"=>$res,"Created"=>$my_functions->now(),"token"=>$token_new);
 
 
         }
@@ -855,11 +863,7 @@
 
         }
 
-        public function reduce_discount_price()
-        {
-
-        }
-
+        
         public function delete_one_cart_items($pids_del,$role,$acc_session_val,$nows)
         {
             if($role == "member")
@@ -1688,14 +1692,121 @@
     }
 
     
+//dashboard 
+public function get_limit_active_record()
+{
+    $active_rate = "1,2,3";
+    //$exploded_active = implode(",",$active_rate);
+    $url = urlencode($active_rate);
+    $chg = str_replace('%2C','%27%2C%27',$url); //change , symbol to ','
+    $re_url =  urldecode($chg);
 
+    $data = $this->conn->prepare("SELECT * FROM orders JOIN orders_trx ON orders.order_id = orders_trx.order_id WHERE orders_trx.status IN('$re_url') ORDER BY orders.order_id ASC LIMIT 4;");
+    $data->execute();
+    $res = $data->fetchAll();
+            
+            if(empty($res))
+            {
+                return null;
+            }else{
+                //$ress = array("Products"=>$res);
+                //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+                
+                return $res;
+
+            }
+
+
+}
+
+public function get_uncompleted()
+{
+    $active_rate = "1,2,3";
+    //$exploded_active = implode(",",$active_rate);
+    $url = urlencode($active_rate);
+    $chg = str_replace('%2C','%27%2C%27',$url); //change , symbol to ','
+    $re_url =  urldecode($chg);
+
+    $data = $this->conn->prepare("SELECT * FROM orders JOIN orders_trx ON orders.order_id = orders_trx.order_id WHERE orders_trx.status IN('$re_url') ORDER BY orders.order_id ASC ;");
+    $data->execute();
+    $res = $data->fetchAll();
+            
+            if(empty($res))
+            {
+                return null;
+            }else{
+                //$ress = array("Products"=>$res);
+                //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+                
+                return $res;
+
+            }
+
+}
+
+public function get_completed()
+{
+    $active_rate = "4";
+    //$exploded_active = implode(",",$active_rate);
+    $url = urlencode($active_rate);
+    $chg = str_replace('%2C','%27%2C%27',$url); //change , symbol to ','
+    $re_url =  urldecode($chg);
+
+    $data = $this->conn->prepare("SELECT * FROM orders JOIN orders_trx ON orders.order_id = orders_trx.order_id WHERE orders_trx.status IN('$re_url') ORDER BY orders.order_id ASC ;");
+    $data->execute();
+    $res = $data->fetchAll();
+            
+            if(empty($res))
+            {
+                return null;
+            }else{
+                //$ress = array("Products"=>$res);
+                //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+                
+                return $res;
+
+            }
+
+}
+
+public function get_active_promotion($curent_date)
+{
+    
+    $data = $this->conn->prepare("SELECT * FROM `promotion` WHERE promotion_start <= :cur_dates AND promotion_end >= :cur_date ;");
+    $data->bindParam(":cur_dates",$curent_date);
+    $data->bindParam(":cur_date",$curent_date);
+    $data->execute();
+    $res = $data->fetchAll();
+            
+            if(empty($res))
+            {
+                return null;
+            }else{
+                //$ress = array("Products"=>$res);
+                //$pretty = json_encode($ress , JSON_PRETTY_PRINT);
+                
+                return $res;
+
+            }
+
+}
      
+public function get_packages_order($oid)
+{
+    $data = $this->conn->prepare("SELECT * FROM `orders` WHERE order_id = :oids ;");
+    $data->bindParam(':oids',$oid);
+    $data->execute();
+    $res = $data->fetch();
 
+    return $res['order_packages'];
+}
      
 
    
     
 }
+
+
 
 
 

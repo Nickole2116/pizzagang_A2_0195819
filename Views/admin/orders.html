@@ -186,11 +186,15 @@
                                                     '<td><small>'+datas[i].address+'</small></td>'+
                                                     '<td> RM '+format_price+'</td>'+
                                                     '<td><small>'+datas[i].descriptions+'</small></td>'+
-                                                    '<td><button onclick="delete_order('+datas[i].order_id+')" type="button" class="btn btn-danger">Delete</button> <button onclick="open_upt('+datas[i].order_id+')" type="button" class="btn btn-warning">Update</button> <button style="'+type_but+'" onclick="change_status('+datas[i].status+','+datas[i].orders_trx_id+')" type="button" class="btn btn-dark">'+next_word+'</button></td><tr>');
+                                                    '<td><button onclick="delete_order('+datas[i].order_id+')" type="button" class="btn btn-danger">Delete</button></td> <td><button onclick="open_upt('+datas[i].order_id+')" type="button" class="btn btn-warning">Update</button> </td><td><button style="'+type_but+'" onclick="change_status('+datas[i].status+','+datas[i].orders_trx_id+')" type="button" class="btn btn-dark"><small>'+next_word+'</small></button></td>'+
+                                                    '<td><button onclick="load_product_list('+datas[i].order_id+')" type="button" class="btn btn-info">View Product</button><td><tr>');
+
 
                             }
 
                         }
+
+                       
                         
                         
                     },
@@ -373,6 +377,32 @@
                         }
                     });
                
+
+
+            }
+
+            
+
+            function load_product_list(pid)
+            {
+                var projectname = window.location.pathname;
+                    var slice_projname = projectname.split("/");
+                    var origin_path = window.location.origin + "/" + slice_projname[1];
+                    var base_url = origin_path + '/Controllers/index.php?action=fetch_product_name';
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: base_url,
+                        data:{ oids: pid},
+                        success: function(datas) {
+                            alert(datas);
+                            //$('#product_lists').append(datas);
+                            
+                        },
+                        error: function() {
+                            alert('Error occured');
+                        }
+                    });
 
 
             }

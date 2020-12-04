@@ -68,17 +68,46 @@
                     {
                         //got result
                         var count = datas.length ;
+                        var statusword = "";
+                        var color = "";
                         for (var i=0;i<count;i++)
                         {
-                            $('#order_rec').append('<div style="border-radius:15px;background: gold;padding: 10px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15), 0 6px 20px 0 rgba(231, 231, 231, 0.14);">'+
+                            
+                            if(datas[i].status == 1)
+                            {
+                                statusword = "Receiving";
+                                color = "#e3742a";
+                            }else if(datas[i].status == 2)
+                            {
+                                statusword = "Pending";
+                                color = "gold";
+                            }
+                            else if(datas[i].status == 3)
+                            {
+                                statusword = "Delivering";
+                                color = "#6b679c";
+
+                            }
+                            else if(datas[i].status == 4)
+                            {
+                                statusword = "Done";
+                                color = "#3f823f";
+
+                            }else{
+                                statusword = "Failed";
+                                color = "#555755";
+
+                            }
+                            
+                            $('#order_rec').append('<div style="border-radius:15px;background: #f4f4f4;padding: 10px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15), 0 6px 20px 0 rgba(231, 231, 231, 0.14);">'+
                             '<div style="margin-bottom: 10px;">'+datas[i].tracking_number+'</div>'+
                             '<div style="width: 100%;height: 1px;background-color: rgba(0, 0, 0, 0.2);margin-bottom: 10px;"></div>'+
                             '<span><svg width="1em" height="1em" viewBox="0 0 18 18" class="bi bi-person-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">'+
                             '<path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 0 0 8 15a6.987 6.987 0 0 0 5.468-2.63z"/>'+
                             '<path fill-rule="evenodd" d="M8 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path fill-rule="evenodd" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"/>'+
                             '</svg> &nbsp;'+datas[i].delivery_name+'</span><BR><span style="padding-left: 10px;padding-right: 10px;font-size: 9px;">'+datas[i].address+'</span>'+
-                            '<br><small>'+datas[i].email_address+' | '+datas[i].phone_number+'</small><br><br><h2>'+datas[i].status+' </h2><br>'+
-                            '<a href="'+origin_path+'/Controllers/index.php?action=view_orders_details&id='+datas[i].ref_id+'"><button id="" style="width: 100%;background-color: white;border-radius: 15px;border: none;font-weight: bold;">More ...</button><br></div><br><br></a>')
+                            '<br><small>'+datas[i].email_address+' | '+datas[i].phone_number+'</small><br><br>'+
+                            '<a href="'+origin_path+'/Controllers/index.php?action=view_orders_details&id='+datas[i].ref_id+'"><button id="" style="width: 100%;background-color: '+color+';border-radius: 15px;border: none;font-weight: bold;">'+statusword+' ...</button><br></div><br><br></a>')
 
                         }
                         

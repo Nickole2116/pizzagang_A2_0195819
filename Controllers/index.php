@@ -2303,6 +2303,29 @@ class Controller{
 
         }
     }
+
+    public function get_search_category()
+    {
+        $type = $_POST['category'];
+        $conn = PDOConnection::getConnection();
+        $db_query = new Model($conn);
+        $data = $db_query->get_type_listings($type);
+
+        if(!empty($data))
+        {
+            echo json_encode($data);
+        }else
+        {
+
+            $my_functions = new My_functions();
+
+            $data = array("Response"=>"No Result Found",
+                          "Path"=>__FUNCTION__,
+                          "Actioned"=>$my_functions->now());
+            echo json_encode($data);
+
+        }
+    }
     
 
     

@@ -66,7 +66,8 @@
             </div>
         </div>
 
-        <br><br>
+        
+<br><br>
         <div style="width: 100%;text-align: center;padding: 10px;" id="slot_add">
             <button onclick="open_slot_add();" class="btn btn-dark">Add New Products</button>
             <div style="height: 2px;background-color: rgb(238, 238, 238);margin: 10px 20px;"></div>
@@ -152,6 +153,26 @@
             </div>
 
         </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-lg-12 col-xs-12">
+                    <div style="padding: 20px;float: right;">
+                        <small style="padding-top: 5px;"><b>Filter By :</b></small>
+
+                        <select class="form-control" id="search-category" style="width: auto;" onchange="search_category(this.value)">
+                            <option value="all">All</option>
+                            <option value="1">Pizza </option>
+                            <option value="2">Salads</option>
+                            <option value="3">Desserts</option>
+                            <option value="4">Beverages</option>
+                            <option value="5">Sides</option>
+                          </select>
+                    </div>
+
+                </div>
+            </div>
+        </div>
        
 
        
@@ -189,7 +210,7 @@
 
                         if(datas.Response == "No Result Found")
                         {
-                            $('#view_product').append('<span>'+datas.Response+'</span>');
+                            $('#view_product').append('<h4 style="text-align:center;width:100%">'+datas.Response+'</h4>');
 
                         }else
                         {
@@ -337,6 +358,54 @@
                             //alert('Error occured');
                         }
                     });
+                }
+
+                function search_category(val)
+                {
+                    var projectname = window.location.pathname;
+                var slice_projname = projectname.split("/");
+                var origin_path = window.location.origin + "/" + slice_projname[1];
+
+
+                var base_url = origin_path + '/Controllers/index.php?action=get_search_category';
+                
+                $.ajax({
+                    type: "POST",
+                    url: base_url,
+                    data:{ category: val},
+                    dataType: 'JSON',
+                    success: function(datas) {
+
+                        if(datas.Response == "No Result Found")
+                        {
+                            $('#view_product').html("");
+                            $('#view_product').append('<h4 style="text-align:center;width:100%">'+datas.Response+'</h4>');
+
+                        }else
+                        {
+                            $('#view_product').html("");
+
+                            for(var i=0;i<datas.length;i++)
+                            {
+
+                                //$('#pizza_list').append(datas[i].product_name + datas[i].product_description);
+                                $('#view_product').append('<br><br><div class="col-12 col-lg-6 col-xs-12 col-sm-12"><div style="margin:10px;color: white;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);border-radius: 15px;">'+
+                                '<div class="container-fluid"><div class="row"><div class="col-4 col-xs-4 col-sm-3 col-lg-3 "><div style="text-align: center;padding: 5px;"><img src="http://localhost/Assignment2_pizzagang/Controllers/upload/'+datas[i].product_attachs+'" width="100%" style="margin-bottom: 5px;">'+
+                                '</div></div><div class="col-8 col-xs-8 col-sm-9 col-lg-9 "><h5 style="color: black;margin-top: 5px;">'+datas[i].product_name+'<sup><mark style="background:gold">'+datas[i].category_name+'</mark></sup></h5>'+
+                                '<p style="color: black;font-size: 10px;">'+datas[i].product_description+'</p><span style="color: black;font-weight: bold;">RM '+datas[i].product_price+'</span><div style="padding-top: 10px;padding-bottom: 10px;"><button onclick="delete_product('+datas[i].product_id+')" class="btn btn-danger">delete</button> &nbsp;<button onclick="open_slot_upt('+datas[i].product_id+')" class="btn btn-warning">Update Details</button></div>'+
+                                '</div></div></div></div></div><br>');
+
+                            }
+
+                        }
+                        
+                        
+                    },
+                    error: function() {
+                        //alert('Error occured');
+                    }
+                });
+
                 }
                 
             </script>
